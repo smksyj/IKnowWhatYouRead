@@ -15,6 +15,7 @@ import java.util.Vector;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
@@ -34,6 +35,9 @@ public class MainFrame extends JFrame {
 	Vector<URLPanel> urlpanels;
 	// added
 	WordDatabase database = new WordDatabase();
+	
+	private JButton crawlingButton;
+	private JButton analysisButton;
 	
 	/**
 	 * Launch the application.
@@ -75,7 +79,6 @@ public class MainFrame extends JFrame {
 		
 
 		setTitle("IKWYR");
-		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 473, 539);
 		gridBagLayout = new GridBagLayout();
@@ -101,19 +104,24 @@ public class MainFrame extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				if(arg0.getActionCommand().equals("ADD URL")){
 					urlpanels.addElement(new URLPanel());
-					urlpanels.get(urlpanels.size()-1).setPreferredSize(new Dimension(450, 60));
+					urlpanels.get(urlpanels.size()-1).setPreferredSize(new Dimension(450,104));
 					MainFrame.this.panel_1.add(urlpanels.get(urlpanels.size()-1));
+					crawlingButton.setEnabled(true);
+					analysisButton.setEnabled(true);
+					
 					MainFrame.this.validate();
 				}
 			}
 		});
 		panel.add(btnNewButton);
 		
-		JButton crawlingButton = new JButton("Crawling");
+		crawlingButton = new JButton("Crawling");
+		crawlingButton.setEnabled(false);
 		crawlingButton.addActionListener(new CrawlingListener());
 		panel.add(crawlingButton);
 		
-		JButton analysisButton = new JButton("Analysis");
+		analysisButton = new JButton("Analysis");
+		analysisButton.setEnabled(false);
 		analysisButton.addActionListener(new AnalysisListener());
 		panel.add(analysisButton);
 		
@@ -137,6 +145,17 @@ public class MainFrame extends JFrame {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			Boolean temp= false;
+			for(URLPanel panel: MainFrame.this.urlpanels){
+				if(panel.GetURL().substring(0, 6)!= "http://" && panel.GetURL().substring(0, 7)!= "https://"){
+					temp= true;
+				}
+			}
+			if(temp== true){
+				JOptionPane.showMessageDialog(null, "Invalid URL");
+				return;
+			}
+			
 			for ( URLPanel panel : MainFrame.this.urlpanels ) {
 				System.out.println(crawler.getHtml(panel.GetURL()));
 				
