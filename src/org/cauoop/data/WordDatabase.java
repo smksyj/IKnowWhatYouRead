@@ -1,23 +1,30 @@
 package org.cauoop.data;
-import java.sql.*;
-import org.cauoop.filter.Data;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.cauoop.filter.ArticleFilter;
+
 public class WordDatabase {
 	public static void main(String[] args) {
 		WordDatabase learn = new WordDatabase();
-		List<LinkedList<String>> word = new ArrayList<LinkedList<String>>();
-		//String[] test = new String[1];
+		//List<LinkedList<String>> word = new ArrayList<LinkedList<String>>();
+		String[] test = new String[3];
 
-		//test.add("han");
-		//test.add("hyun");
-		//test.add("abcd");
+		test[0] = "han";
+		test[1] = "hyun";
+		test[2] = "abcd";
 		
-		Data insertWord = new Data("english", "컴퓨터가 스마트폰을 때렸대");
+		ArticleFilter insertWord = new ArticleFilter("english", "컴퓨터가 스마트폰을 때렸대");
 		learn.learningInsert(insertWord);
-
+		//learn.learningInsert(test, "한글이다");
+		
+		
 		/*List<String> wordSet = new LinkedList<String>();
 		wordSet.add("han");
 		wordSet.add("hyun");
@@ -33,7 +40,7 @@ public class WordDatabase {
 	}
 
 	//Change parameter later List<String>, String cat -> List<Data>      Data is UDT made by gea chul
-	public void learningInsert(Data word){
+	public void learningInsert(ArticleFilter word){
 		Connection conn;
 		Statement stmt;
 		/*PreparedStatement updateStmt;
@@ -91,6 +98,50 @@ public class WordDatabase {
 					//insertStmt.setString(1, word.get(0));
 					//insertStmt.setString(2, cat);
 					//insertStmt.executeUpdate();
+				}
+			}
+			conn.close();
+			stmt.close();
+		}catch(SQLException e){
+			System.out.println("fail... "+e.getMessage());
+		}
+	}
+	
+	public void learningInsert(String[] words, String cat){
+		Connection conn;
+		Statement stmt;
+
+		try{
+			Class.forName("com.mysql.jdbc.Driver");
+		}catch(ClassNotFoundException e){
+			System.err.print("ClassNOtFoundException: ");
+		}
+
+		try{
+			String jdbcUrl = "jdbc:mysql://intra.zeropage.org:3306/OOPProj";
+			String userid = "root";
+			String userPass = "";
+			conn = DriverManager.getConnection(jdbcUrl,userid,userPass);
+			System.out.println("connetion success");
+			stmt = conn.createStatement();
+
+			//word table
+			//+------------+
+			//|category|num|
+			//|------------|
+			int j = words.length;		
+			for(int i = 0; i<j; i++){
+				String sql = "UPDATE " + words[i] + " SET num=num+1 WHERE category='" + cat + "'";
+				try{
+					if(stmt.executeUpdate(sql)==0){	//Table is exist but have no row category=word.get(0)
+						sql = "INSERT INTO " + words[i] + " VALUES('"+cat+"', 1)";
+						stmt.executeUpdate(sql);
+					}
+				}catch(SQLException e){	//If word table wasn't exist. Create table and insert values
+					sql = "CREATE TABLE IF NOT EXISTS " + words[i] + "(category CHAR(10) NOT NULL, num INT, PRIMARY KEY(category))";
+					stmt.executeUpdate(sql);
+					sql = "INSERT INTO " + words[i] + " VALUES('"+cat+"', 1)";
+					stmt.executeUpdate(sql);
 				}
 			}
 			conn.close();
