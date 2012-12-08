@@ -11,33 +11,33 @@ import java.util.List;
 import org.cauoop.filter.ArticleFilter;
 
 public class WordDatabase {
-	public static void main(String[] args) {
-		WordDatabase learn = new WordDatabase();
-		//List<LinkedList<String>> word = new ArrayList<LinkedList<String>>();
-		String[] test = new String[3];
-
-		test[0] = "han";
-		test[1] = "hyun";
-		test[2] = "abcd";
-		
-		ArticleFilter insertWord = new ArticleFilter("english", "컴퓨터가 스마트폰을 때렸대");
-		learn.learningInsert(insertWord);
-		//learn.learningInsert(test, "한글이다");
-		
-		
-		/*List<String> wordSet = new LinkedList<String>();
-		wordSet.add("han");
-		wordSet.add("hyun");
-		wordSet.add("noex");
-		word = learn.wordStatistic(wordSet);
-
-		for(int i = 0; i<word.size(); i++){
-			for(int j = 0; j<word.get(i).size(); j++){
-				System.out.print(word.get(i).get(j)+" ");
-			}
-			System.out.println();
-		}*/
-	}
+//	public static void main(String[] args) {
+//		WordDatabase learn = new WordDatabase();
+//		//List<LinkedList<String>> word = new ArrayList<LinkedList<String>>();
+//		String[] test = new String[3];
+//
+//		test[0] = "han";
+//		test[1] = "hyun";
+//		test[2] = "abcd";
+//		
+//		ArticleFilter insertWord = new ArticleFilter("english", "컴퓨터가 스마트폰을 때렸대");
+//		learn.learningInsert(insertWord);
+//		//learn.learningInsert(test, "한글이다");
+//		
+//		
+//		/*List<String> wordSet = new LinkedList<String>();
+//		wordSet.add("han");
+//		wordSet.add("hyun");
+//		wordSet.add("noex");
+//		word = learn.wordStatistic(wordSet);
+//
+//		for(int i = 0; i<word.size(); i++){
+//			for(int j = 0; j<word.get(i).size(); j++){
+//				System.out.print(word.get(i).get(j)+" ");
+//			}
+//			System.out.println();
+//		}*/
+//	}
 
 	//Change parameter later List<String>, String cat -> List<Data>      Data is UDT made by gea chul
 	public void learningInsert(ArticleFilter word){
