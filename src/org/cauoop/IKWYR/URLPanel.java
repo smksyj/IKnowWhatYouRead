@@ -1,16 +1,10 @@
-import javax.swing.JPanel;
-import javax.swing.BoxLayout;
-import javax.swing.JTextField;
-import javax.swing.JButton;
-import java.awt.FlowLayout;
-import javax.swing.SwingConstants;
-import java.awt.BorderLayout;
+package org.cauoop.IKWYR;
+
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
-import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.border.BevelBorder;
-
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 public class URLPanel extends JPanel {
 	private JTextField urlInputField;
@@ -29,7 +23,7 @@ public class URLPanel extends JPanel {
 		
 		JLabel lblUrl = new JLabel("URL \uC785\uB825");
 		
-		JLabel lblNewLabel = new JLabel("\uACB0\uACFC");
+		JLabel lblNewLabel = new JLabel("카테고리");
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -66,5 +60,9 @@ public class URLPanel extends JPanel {
 	}
 	public void SetResult(String result){
 		this.resultField.setText(result);
+	}
+
+	public String GetCategory() {
+		return this.resultField.getText();
 	}
 }

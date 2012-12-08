@@ -1,45 +1,40 @@
-import java.awt.EventQueue;
+package org.cauoop.IKWYR;
 
-import javax.swing.JFrame;
+import java.awt.Dimension;
+import java.awt.EventQueue;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Vector;
+
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import java.awt.GridBagLayout;
-import javax.swing.JPanel;
-
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import java.awt.GridLayout;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import javax.swing.JScrollPane;
-import java.awt.FlowLayout;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.SpringLayout;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.layout.RowSpec;
-import net.miginfocom.swing.MigLayout;
-import java.awt.BorderLayout;
-import java.awt.Toolkit;
-import java.util.Vector;
+import org.cauoop.alg.Classifier;
+import org.cauoop.crawler.ArticleCrawler;
+import org.cauoop.data.WordDatabase;
+import org.cauoop.filter.ArticleFilter;
 
 
-public class MainFrame extends JFrame {
-	
+public class MainFrame extends JFrame {	
 	GridBagLayout gridBagLayout;
 	JPanel panel;
 	JPanel panel_1;
 	Vector<URLPanel> urlpanels;
+	// added
+	WordDatabase database = new WordDatabase();
+	
 	/**
 	 * Launch the application.
 	 */
@@ -60,7 +55,6 @@ public class MainFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public MainFrame() {
-		
 		urlpanels= new Vector<URLPanel>();
 		
 		try {
@@ -115,11 +109,13 @@ public class MainFrame extends JFrame {
 		});
 		panel.add(btnNewButton);
 		
-		JButton btnNewButton_1 = new JButton("Crawling");
-		panel.add(btnNewButton_1);
+		JButton crawlingButton = new JButton("Crawling");
+		crawlingButton.addActionListener(new CrawlingListener());
+		panel.add(crawlingButton);
 		
-		JButton btnNewButton_2 = new JButton("Analysis");
-		panel.add(btnNewButton_2);
+		JButton analysisButton = new JButton("Analysis");
+		analysisButton.addActionListener(new AnalysisListener());
+		panel.add(analysisButton);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -135,25 +131,34 @@ public class MainFrame extends JFrame {
 		scrollPane.setViewportView(panel_1);
 		panel_1.setLayout(new BoxLayout(panel_1, BoxLayout.Y_AXIS));
 	}
-
-	private class SwingAction extends AbstractAction {
-		public SwingAction() {
-			putValue(NAME, "SwingAction");
-			putValue(SHORT_DESCRIPTION, "Some short description");
-		}
+	
+	private class CrawlingListener implements ActionListener {
+		ArticleCrawler crawler = new ArticleCrawler();
+		
+		@Override
 		public void actionPerformed(ActionEvent e) {
-		}
-	}
-	private class SwingAction_1 extends AbstractAction {
-		public SwingAction_1() {
-			putValue(NAME, "SwingAction_1");
-			putValue(SHORT_DESCRIPTION, "Some short description");
-		}
-		public void actionPerformed(ActionEvent e) {
-		}
+			for ( URLPanel panel : MainFrame.this.urlpanels ) {
+				System.out.println(crawler.getHtml(panel.GetURL()));
+				
+				ArticleFilter filter = new ArticleFilter(panel.GetCategory(), crawler.getHtml(panel.GetURL()));
+				
+				database.learningInsert(new LinkedList<String>(Arrays.asList(filter.getSplit())), panel.GetCategory());
+			}			
+		}		
 	}
 	
-	public void print(){
-		System.out.println("qasdlkfjakslfdja");
+	private class AnalysisListener implements ActionListener {
+		List<String> words = null;
+		Classifier classifier = new Classifier();
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			for ( URLPanel panel : MainFrame.this.urlpanels ) {
+				ArticleFilter filter = new ArticleFilter(null, panel.GetURL());
+				words = new LinkedList<String>(Arrays.asList(filter.getSplit()));
+			}			
+			
+			List<LinkedList<String>> wordStatistic = database.wordStatistic(words);
+		}
 	}
 }
