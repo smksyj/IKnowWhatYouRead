@@ -5,29 +5,45 @@ import java.util.List;
 
 public class Classifier {
 	public List<String> filtering(int[][] categoryAndFrequency) {
-		int sum = 0;
+		double sum = 0;
 		
 		ArrayList<Integer> poli = new ArrayList<Integer>();
-		poli.add(20);
-		poli.add(30);
+		poli.add(200);
+		poli.add(10);
+		
 		ArrayList<Integer> IT = new ArrayList<Integer>();
-		IT.add(30);
-		IT.add(10);
+		IT.add(50);
+		IT.add(0);
 		ArrayList<Integer> enter = new ArrayList<Integer>();
-		enter.add(40);
-		enter.add(60);
+		enter.add(2);
+		enter.add(3);
 
+		ArrayList<Integer> numOfReadingArticle = new ArrayList<Integer>();
+		numOfReadingArticle.add(100);
+		numOfReadingArticle.add(50);
+		numOfReadingArticle.add(1);
+		
 		List<ArrayList<Integer>> temp = new ArrayList<ArrayList<Integer>>();
 		temp.add(poli);
 		temp.add(IT);
 		temp.add(enter);
-		int[] categoryCount = new int[temp.size()];
-
+		double[] categoryCount = new double[temp.size()];
+		int[] wordSum = new int[temp.get(0).size()];
+		
+		//첫번째 get이 카테고리 갯수 i, 두번째 get이 단어갯수 j
+		for ( int i = 0; i < temp.size(); i++ ) {
+			for(int j= 0 ; j < temp.get(0).size() ; j++){
+				wordSum[j] += temp.get(i).get(j);
+			}
+		}
+		
 		for ( int i = 0; i < temp.size(); i++ ) {
 			categoryCount[i] = 1;
-
+		
+			
 			for ( int j = 0; j < temp.get(0).size(); j++ ) {
-				categoryCount[i] *= temp.get(i).get(j);
+				
+				categoryCount[i] *= (double)(temp.get(i).get(j))/numOfReadingArticle.get(i);
 			}
 		}
 
@@ -46,5 +62,10 @@ public class Classifier {
 		}		
 
 		return null;
+	}
+	public static void main(String[] args) {
+		Classifier a= new Classifier();
+		int[][] aa = new int[1][1];
+		a.filtering(aa);
 	}
 }

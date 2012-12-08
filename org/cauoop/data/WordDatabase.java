@@ -18,7 +18,7 @@ public class WordDatabase {
 		List<String> wordSet = new LinkedList<String>();
 		wordSet.add("han");
 		wordSet.add("hyun");
-		wordSet.add("noex"); 
+		wordSet.add("noex");
 		word = learn.wordStatistic(wordSet);
 
 		for(int i = 0; i<word.size(); i++){
@@ -29,7 +29,7 @@ public class WordDatabase {
 		}
 	}
 
-	//Change parameter later List<String>, String cat -> List<Data>      Data is UDT made by jae chul
+	//Change parameter later List<String>, String cat -> List<Data>      Data is UDT made by jae cheol
 	public void learningInsert(List<String> word, String cat){
 		Connection conn;
 		Statement stmt;
