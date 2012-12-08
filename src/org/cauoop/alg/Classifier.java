@@ -7,13 +7,13 @@ public class Classifier {
 	public List<String> filtering(int[][] categoryAndFrequency) {
 		int sum = 0;
 		
-		ArrayList<Integer> poli = new ArrayList<>();
+		ArrayList<Integer> poli = new ArrayList<Integer>();
 		poli.add(20);
 		poli.add(30);
-		ArrayList<Integer> IT = new ArrayList<>();
+		ArrayList<Integer> IT = new ArrayList<Integer>();
 		IT.add(30);
 		IT.add(10);
-		ArrayList<Integer> enter = new ArrayList<>();
+		ArrayList<Integer> enter = new ArrayList<Integer>();
 		enter.add(40);
 		enter.add(60);
 
