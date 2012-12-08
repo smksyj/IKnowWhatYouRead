@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class WordDatabase {
+	/*
 	public static void main(String[] args) {
 		WordDatabase learn = new WordDatabase();
 		List<LinkedList<String>> word = new ArrayList<LinkedList<String>>();
@@ -28,6 +29,7 @@ public class WordDatabase {
 			System.out.println();
 		}
 	}
+	*/
 
 	//Change parameter later List<String>, String cat -> List<Data>      Data is UDT made by gea chul
 	public void learningInsert(List<String> word, String cat){
