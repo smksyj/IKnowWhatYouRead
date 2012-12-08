@@ -29,7 +29,7 @@ public class WordDatabase {
 		}
 	}
 
-	//Change parameter later List<String>, String cat -> List<Data>      Data is UDT made by gea chul
+	//Change parameter later List<String>, String cat -> List<Data>      Data is UDT made by jae chul
 	public void learningInsert(List<String> word, String cat){
 		Connection conn;
 		Statement stmt;
