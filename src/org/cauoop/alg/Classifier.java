@@ -1,10 +1,11 @@
 package org.cauoop.alg;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Classifier {
-	public List<String> filtering(int[][] categoryAndFrequency) {
+	public List<String> filtering(List<LinkedList<String>> wordStatistic) {
 		int sum = 0;
 		
 		ArrayList<Integer> poli = new ArrayList<Integer>();

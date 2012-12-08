@@ -159,6 +159,14 @@ public class MainFrame extends JFrame {
 			}			
 			
 			List<LinkedList<String>> wordStatistic = database.wordStatistic(words);
+			
+			MainFrame.this.setCategoryResults(classifier.filtering(wordStatistic));
 		}
 	}
+
+	public void setCategoryResults(List<String> filtering) {
+		for ( int i = 0; i < this.urlpanels.size(); i++ ) {
+			this.urlpanels.get(i).SetResult(filtering.get(i));
+		}
+	}	
 }
