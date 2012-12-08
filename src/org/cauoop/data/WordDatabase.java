@@ -22,8 +22,13 @@ public class WordDatabase {
 //		
 //		ArticleFilter insertWord = new ArticleFilter("english", "컴퓨터가 스마트폰을 때렸대");
 //		learn.learningInsert(insertWord);
-//		//learn.learningInsert(test, "한글이다");
+//		learn.learningInsert(test, "한글이다");
 //		
+//		List<String> catCount = learn.categoryCount();
+//		
+//		for(int i = 0; i<catCount.size(); i++){
+//			System.out.println(catCount.get(i));
+//		}	
 //		
 //		/*List<String> wordSet = new LinkedList<String>();
 //		wordSet.add("han");
@@ -42,7 +47,7 @@ public class WordDatabase {
 	//Change parameter later List<String>, String cat -> List<Data>      Data is UDT made by gea chul
 	public void learningInsert(ArticleFilter word){
 		Connection conn;
-		Statement stmt;
+		Statement stmt, catCount;
 		/*PreparedStatement updateStmt;
 		String sql1 = "UPDATE ? SET num=num+1 WHERE category=?";
 		PreparedStatement createStmt;
@@ -61,12 +66,23 @@ public class WordDatabase {
 			String userid = "root";
 			String userPass = "";
 			conn = DriverManager.getConnection(jdbcUrl,userid,userPass);
-			System.out.println("connetion success");
 			stmt = conn.createStatement();
 
 			/*updateStmt = conn.prepareStatement(sql1);
 			createStmt = conn.prepareStatement(sql2);
 			insertStmt = conn.prepareStatement(sql3);*/
+			
+			catCount = conn.createStatement();
+
+			String catInsert = "CREATE TABLE IF NOT EXISTS catCount(cat CHAR(10) NOT NULL, num INT, PRIMARY KEY(cat))";
+			catCount.executeUpdate(catInsert);
+			
+			String catUpdate = "UPDATE catCount SET num=num+1 WHERE cat='" + word.getCategory() + "'";
+			if(catCount.executeUpdate(catUpdate)==0){	//Table is exist but have no row category=word.get(0)
+				catUpdate = "INSERT INTO catCount VALUES('"+word.getCategory()+"', 1)";
+				stmt.executeUpdate(catUpdate);
+			}
+			catCount.close();
 
 			//word table
 			//+------------+
@@ -109,7 +125,7 @@ public class WordDatabase {
 	
 	public void learningInsert(String[] words, String cat){
 		Connection conn;
-		Statement stmt;
+		Statement stmt, catCount;
 
 		try{
 			Class.forName("com.mysql.jdbc.Driver");
@@ -122,9 +138,20 @@ public class WordDatabase {
 			String userid = "root";
 			String userPass = "";
 			conn = DriverManager.getConnection(jdbcUrl,userid,userPass);
-			System.out.println("connetion success");
 			stmt = conn.createStatement();
+			
+			catCount = conn.createStatement();
 
+			String catInsert = "CREATE TABLE IF NOT EXISTS catCount(cat CHAR(10) NOT NULL, num INT, PRIMARY KEY(cat))";
+			catCount.executeUpdate(catInsert);
+
+			String catUpdate = "UPDATE catCount SET num=num+1 WHERE cat='" + cat + "'";
+			if(catCount.executeUpdate(catUpdate)==0){	//Table is exist but have no row category=word.get(0)
+				catUpdate = "INSERT INTO catCount VALUES('"+cat+"', 1)";
+				stmt.executeUpdate(catUpdate);
+			}
+			catCount.close();
+			
 			//word table
 			//+------------+
 			//|category|num|
@@ -204,5 +231,40 @@ public class WordDatabase {
 			System.out.println("fail... "+e.getMessage());
 		}
 		return stat;
+	}
+	
+	public List<String> categoryCount(){
+		List<String> category = new LinkedList<String>();
+		Connection conn;
+		Statement stmt;
+		ResultSet rs;
+
+		try{
+			Class.forName("com.mysql.jdbc.Driver");
+		}catch(ClassNotFoundException e){
+			System.err.print("ClassNOtFoundException: ");
+		}
+
+		try{
+			String jdbcUrl = "jdbc:mysql://intra.zeropage.org:3306/OOPProj";
+			String userid = "root";
+			String userPass = "";
+			conn = DriverManager.getConnection(jdbcUrl,userid,userPass);
+			stmt = conn.createStatement();
+			
+			String sql = "SELECT * FROM catCount";
+			rs = stmt.executeQuery(sql);
+			rs.next();
+			
+			while(!rs.isAfterLast()){
+				category.add(rs.getString(1));
+				category.add(Integer.toString(rs.getInt(2)));
+				rs.next();
+			}			
+		}catch(SQLException e){
+			System.out.println("fail... "+e.getMessage());
+		}
+		
+		return category;
 	}
 }
