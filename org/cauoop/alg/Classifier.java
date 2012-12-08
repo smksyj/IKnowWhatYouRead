@@ -5,13 +5,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Classifier {
-<<<<<<< HEAD:org/cauoop/alg/Classifier.java
-	public List<String> filtering(int[][] categoryAndFrequency) {
-		double sum = 0;
-=======
 	public List<String> filtering(List<LinkedList<String>> wordStatistic) {
 		int sum = 0;
->>>>>>> 6ec798c6984c24c9d5e2f973b41add521f0c75ea:src/org/cauoop/alg/Classifier.java
+
 		
 		ArrayList<Integer> poli = new ArrayList<Integer>();
 		poli.add(200);
