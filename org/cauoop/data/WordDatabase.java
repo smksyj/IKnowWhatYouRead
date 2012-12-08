@@ -18,7 +18,7 @@ public class WordDatabase {
 		List<String> wordSet = new LinkedList<String>();
 		wordSet.add("han");
 		wordSet.add("hyun");
-		wordSet.add("noex");
+		wordSet.add("noex"); 
 		word = learn.wordStatistic(wordSet);
 
 		for(int i = 0; i<word.size(); i++){

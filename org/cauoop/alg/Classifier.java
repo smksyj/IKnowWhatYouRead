@@ -6,6 +6,7 @@ import java.util.List;
 public class Classifier {
 	public List<String> filtering(int[][] categoryAndFrequency) {
 		int sum = 0;
+		
 		ArrayList<Integer> poli = new ArrayList<Integer>();
 		poli.add(20);
 		poli.add(30);
