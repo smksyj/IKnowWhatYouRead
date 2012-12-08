@@ -1,5 +1,6 @@
 package org.cauoop.data;
 import java.sql.*;
+import org.cauoop.filter.Data;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -8,14 +9,16 @@ public class WordDatabase {
 	public static void main(String[] args) {
 		WordDatabase learn = new WordDatabase();
 		List<LinkedList<String>> word = new ArrayList<LinkedList<String>>();
-		List<String> test = new LinkedList<String>();
+		//String[] test = new String[1];
 
-		test.add("han");
-		test.add("hyun");
-		test.add("abcd");
-		learn.learningInsert(test, "english");
+		//test.add("han");
+		//test.add("hyun");
+		//test.add("abcd");
+		
+		Data insertWord = new Data("english", "컴퓨터가 스마트폰을 때렸대");
+		learn.learningInsert(insertWord);
 
-		List<String> wordSet = new LinkedList<String>();
+		/*List<String> wordSet = new LinkedList<String>();
 		wordSet.add("han");
 		wordSet.add("hyun");
 		wordSet.add("noex");
@@ -26,11 +29,11 @@ public class WordDatabase {
 				System.out.print(word.get(i).get(j)+" ");
 			}
 			System.out.println();
-		}
+		}*/
 	}
 
 	//Change parameter later List<String>, String cat -> List<Data>      Data is UDT made by gea chul
-	public void learningInsert(List<String> word, String cat){
+	public void learningInsert(Data word){
 		Connection conn;
 		Statement stmt;
 		/*PreparedStatement updateStmt;
@@ -62,23 +65,26 @@ public class WordDatabase {
 			//+------------+
 			//|category|num|
 			//|------------|
-			int j = word.size();
+			String [] words = word.getSplit();
+			int j = words.length;
+			String cat = word.getCategory();
+			
 			for(int i = 0; i<j; i++){
-				String sql = "UPDATE " + word.get(0) + " SET num=num+1 WHERE category='" + cat + "'";
+				String sql = "UPDATE " + words[i] + " SET num=num+1 WHERE category='" + cat + "'";
 				try{
 					//updateStmt.setString(1, word.get(0));
 					//updateStmt.setString(2, cat);
 					if(stmt.executeUpdate(sql)==0){	//Table is exist but have no row category=word.get(0)
-						sql = "INSERT INTO " + word.get(0) + " VALUES('"+cat+"', 1)";
+						sql = "INSERT INTO " + words[i] + " VALUES('"+cat+"', 1)";
 						stmt.executeUpdate(sql);
 						/*insertStmt.setString(1, word.get(0));
 						insertStmt.setString(2, cat);
 						insertStmt.executeUpdate();*/
 					}
 				}catch(SQLException e){	//If word table wasn't exist. Create table and insert values
-					sql = "CREATE TABLE IF NOT EXISTS " + word.get(0) + "(category CHAR(10) NOT NULL, num INT, PRIMARY KEY(category))";
+					sql = "CREATE TABLE IF NOT EXISTS " + words[i] + "(category CHAR(10) NOT NULL, num INT, PRIMARY KEY(category))";
 					stmt.executeUpdate(sql);
-					sql = "INSERT INTO " + word.get(0) + " VALUES('"+cat+"', 1)";
+					sql = "INSERT INTO " + words[i] + " VALUES('"+cat+"', 1)";
 					stmt.executeUpdate(sql);
 					//createStmt.setString(1, word.get(0));
 					//createStmt.execute();
@@ -86,7 +92,6 @@ public class WordDatabase {
 					//insertStmt.setString(2, cat);
 					//insertStmt.executeUpdate();
 				}
-				word.remove(0);
 			}
 			conn.close();
 			stmt.close();
