@@ -11,34 +11,6 @@ import java.util.List;
 import org.cauoop.filter.ArticleFilter;
 
 public class WordDatabase {
-<<<<<<< HEAD:org/cauoop/data/WordDatabase.java
-	public static void main(String[] args) {
-		WordDatabase learn = new WordDatabase();
-		List<LinkedList<String>> word = new ArrayList<LinkedList<String>>();
-		List<String> test = new LinkedList<String>();
-
-		test.add("han");
-		test.add("hyun");
-		test.add("abcd");
-		learn.learningInsert(test, "english");
-
-		List<String> wordSet = new LinkedList<String>();
-		wordSet.add("han");
-		wordSet.add("hyun");
-		wordSet.add("noex");
-		word = learn.wordStatistic(wordSet);
-
-		for(int i = 0; i<word.size(); i++){
-			for(int j = 0; j<word.get(i).size(); j++){
-				System.out.print(word.get(i).get(j)+" ");
-			}
-			System.out.println();
-		}
-	}
-
-	//Change parameter later List<String>, String cat -> List<Data>      Data is UDT made by jae cheol
-	public void learningInsert(List<String> word, String cat){
-=======
 //	public static void main(String[] args) {
 //		WordDatabase learn = new WordDatabase();
 //		//List<LinkedList<String>> word = new ArrayList<LinkedList<String>>();
@@ -74,7 +46,6 @@ public class WordDatabase {
 
 	//Change parameter later List<String>, String cat -> List<Data>      Data is UDT made by gea chul
 	public void learningInsert(ArticleFilter word){
->>>>>>> 6ec798c6984c24c9d5e2f973b41add521f0c75ea:src/org/cauoop/data/WordDatabase.java
 		Connection conn;
 		Statement stmt, catCount;
 		/*PreparedStatement updateStmt;

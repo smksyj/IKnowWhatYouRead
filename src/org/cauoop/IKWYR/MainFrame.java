@@ -96,11 +96,6 @@ public class MainFrame extends JFrame {
 		getContentPane().add(panel, gbc_panel);
 		panel.setLayout(new GridLayout(1, 0, 0, 0));
 		
-<<<<<<< HEAD:org/cauoop/IKWYR/MainFrame.java
-		List<String> wordList = new LinkedList<String>();
-		wordList.add("박근혜");
-		wordList.add("문재인");
-=======
 		JButton btnNewButton = new JButton("ADD URL");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -113,7 +108,6 @@ public class MainFrame extends JFrame {
 			}
 		});
 		panel.add(btnNewButton);
->>>>>>> 6ec798c6984c24c9d5e2f973b41add521f0c75ea:src/org/cauoop/IKWYR/MainFrame.java
 		
 		JButton crawlingButton = new JButton("Crawling");
 		crawlingButton.addActionListener(new CrawlingListener());

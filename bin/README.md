@@ -1,4 +1,0 @@
-IKnowWhatYouRead
-================
-
-CauOOP Project
