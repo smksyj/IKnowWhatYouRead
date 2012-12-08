@@ -160,7 +160,7 @@ public class MainFrame extends JFrame {
 			
 			List<LinkedList<String>> wordStatistic = database.wordStatistic(words);
 			
-			MainFrame.this.setCategoryResults(classifier.filtering(wordStatistic));
+			MainFrame.this.setCategoryResults(classifier.filtering(wordStatistic, database.categoryCount()));
 		}
 	}
 
