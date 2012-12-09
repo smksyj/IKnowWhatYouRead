@@ -14,18 +14,18 @@ import java.util.List;
 import org.cauoop.filter.ArticleFilter;
 
 public class WordDatabase {
-	
 	public List<String> categoryList;
 	
 	public WordDatabase() {
 		categoryList = new LinkedList<String>();
-		categoryList.add("Á¤Ä¡");
-		categoryList.add("°æÁ¦");
-		categoryList.add("»çÈ¸");
-		categoryList.add("¹®È­");
+		categoryList.add("ï¿½ï¿½Ä¡");
+		categoryList.add("ï¿½ï¿½ï¿½ï¿½");
+		categoryList.add("ï¿½ï¿½È¸");
+		categoryList.add("ï¿½ï¿½È­");
 		categoryList.add("IT");
-		categoryList.add("ÇÑ±ÛÀÌ´Ù");
+		categoryList.add("ï¿½Ñ±ï¿½ï¿½Ì´ï¿½");
 		categoryList.add("english");
+		categoryList.add("í¬íƒˆ");
 		Collections.sort(categoryList, new Comparator<String>() {
 			@Override
 			public int compare(String arg0, String arg1) {
@@ -43,9 +43,9 @@ public class WordDatabase {
 		test[1] = "hyun";
 		test[2] = "abcd";
 		
-		ArticleFilter insertWord = new ArticleFilter("english", "ÄÄÇ»ÅÍ°¡ ½º¸¶Æ®ÆùÀ» ¶§·È´ë");
+		ArticleFilter insertWord = new ArticleFilter("english", "ï¿½ï¿½Ç»ï¿½Í°ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½È´ï¿½");
 		learn.learningInsert(insertWord);
-		//learn.learningInsert(test, "ÇÑ±ÛÀÌ´Ù");
+		//learn.learningInsert(test, "ï¿½Ñ±ï¿½ï¿½Ì´ï¿½");
 		
 		List<String> catCount = learn.categoryCount();
 		
@@ -181,7 +181,11 @@ public class WordDatabase {
 			//|------------|
 			int j = words.length;		
 			for(int i = 0; i<j; i++){
+				if ( words[i].equals("") || words[i].length() > 30 || words[i].matches("[0-9]*") ) {
+					continue;
+				}
 				String sql = "UPDATE " + words[i] + " SET num=num+1 WHERE category='" + cat + "'";
+				System.out.println(words[i]);
 				try{
 					if(stmt.executeUpdate(sql)==0){	//Table is exist but have no row category=word.get(0)
 						sql = "INSERT INTO " + words[i] + " VALUES('"+cat+"', 1)";
@@ -198,6 +202,7 @@ public class WordDatabase {
 			stmt.close();
 		}catch(SQLException e){
 			System.out.println("fail... "+e.getMessage());
+			
 		}
 	}
 
@@ -206,6 +211,8 @@ public class WordDatabase {
 		Statement stmt, inLoop;		
 		
 		Collections.sort(categoryList);
+
+//		String [] cat = {"ì •ì¹˜","ê²½ì œ","ì‚¬íšŒ","ë¬¸í™”","IT","í•œê¸€ì´ë‹¤","english"};
 
 		List<LinkedList<String>> stat = new ArrayList<LinkedList<String>>();
 
@@ -225,7 +232,7 @@ public class WordDatabase {
 			inLoop = conn.createStatement();
 
 			//		->stat -- arraylist
-			//		 cat1  cat2  cat3 ...	¡é
+			//		 cat1  cat2  cat3 ...	â†“
 			//word1   3      0	   2		stat.get(i).get(j)
 			//word2   2     10     7
 			//word3   1      4     8

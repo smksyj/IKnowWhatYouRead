@@ -6,7 +6,7 @@ public class ArticleFilter {
 	
 	public ArticleFilter(String word,String line){
 		category = word;
-		split = line.replaceAll("(\\*|@|#|\\$|_|&|\\!|\\%|\\.|\\,|\\(.*\\)|\\>|-)", "").replace("¸¦ ", " ").replace("´Â ", " ").replace("ÀÌ ", " ").replace("°¡ ", " ").replace("Àº ", " ").replace("¿¡¼­ ", " ").replace("À» ", " ").replace("¶ó°í ", " ").replace("¶ó ", " ").replace("°ú ", " ").replace("¿¡ ", " ").replace("ÇÏ°í ", " ").replace("ÇÏ´Â ", " ").replace("À¸·Î ", " ").split(" ");
+		split = line.replaceAll("(\\*|@|#|\\$|_|&|\\!|\\%|\\.|\\,|\\(.*\\)|\\>|-)", "").replace("ë¥¼ ", " ").replace("ëŠ” ", " ").replace("ì´ ", " ").replace("ê°€ ", " ").replace("ì€ ", " ").replace("ì—ì„œ ", " ").replace("ì„ ", " ").replace("ë¼ê³  ", " ").replace("ë¼ ", " ").replace("ê³¼ ", " ").replace("ì— ", " ").replace("í•˜ê³  ", " ").replace("í•˜ëŠ” ", " ").replace("ìœ¼ë¡œ ", " ").split(" ");
 	}
 	
 	public String getCategory(){

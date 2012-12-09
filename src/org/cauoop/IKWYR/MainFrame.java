@@ -151,25 +151,25 @@ public class MainFrame extends JFrame {
 	
 	private class AnalysisListener implements ActionListener {
 		List<String> words = null;
+		ArticleCrawler crawler = new ArticleCrawler();
 		Classifier classifier = new Classifier();
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			for ( URLPanel panel : MainFrame.this.urlpanels ) {
-				ArticleFilter filter = new ArticleFilter(null, panel.GetURL());
-				words = new LinkedList<String>(Arrays.asList(filter.getSplit()));
+				ArticleFilter filter = new ArticleFilter(null, crawler.getHtml(panel.GetURL()));
+				words = new LinkedList<String>(Arrays.asList(filter.getSplit()));				
 			}			
 			
 			List<LinkedList<String>> wordStatistic = database.wordStatistic(words);
 			
-			MainFrame.this.setCategoryResults(classifier.filtering(wordStatistic, database.categoryCount()));
+			MainFrame.this.setCategoryResults(classifier.classification(wordStatistic, database.categoryCount()));
 		}
 	}
 
-	public void setCategoryResults(List<Result> list) {
-		for (int i = 0; i < CATEGORY_RANK; i++) {
-			Result result = list.get(i);
-			MainFrame.this.urlpanels.get(i).SetResult(result.getCategory() + " " + result.getRatio() + "%\r\n"); 
+	public void setCategoryResults(List<String> classificationResult) {
+		for ( int i = 0; i < this.urlpanels.size(); i++ ) {
+			this.urlpanels.get(i).SetResult(classificationResult.get(i));
 		}
 	}	
 }
