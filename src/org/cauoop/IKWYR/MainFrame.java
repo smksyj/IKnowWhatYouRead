@@ -139,7 +139,7 @@ public class MainFrame extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			for ( URLPanel panel : MainFrame.this.urlpanels ) {
 				System.out.println(crawler.getHtml(panel.GetURL()));
-				
+			
 				ArticleFilter filter = new ArticleFilter(panel.GetCategory(), crawler.getHtml(panel.GetURL()));
 				
 				database.learningInsert(filter.getSplit(), panel.GetCategory());

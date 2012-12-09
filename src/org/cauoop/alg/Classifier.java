@@ -14,11 +14,11 @@ public class Classifier {
 		LinkedList<String> result = new LinkedList<String>();
 		
 		//첫번째 get이 카테고리 갯수 i, 두번째 get이 단어갯수 j
-		for ( int i = 0; i < wordStatistic.size(); i++ ) {
-			for(int j= 0 ; j < wordStatistic.get(0).size() ; j++){
-				wordSum[j] += Integer.parseInt(wordStatistic.get(i).get(j));
-			}
-		}
+//		for ( int i = 0; i < wordStatistic.size(); i++ ) {
+//			for(int j= 0 ; j < wordStatistic.get(0).size() ; j++){
+//				wordSum[j] += Integer.parseInt(wordStatistic.get(i).get(j));
+//			}
+//		}
 		
 		for ( int i = 0; i < wordStatistic.size(); i++ ) {
 			categoryCount[i] = 1;		
