@@ -42,8 +42,7 @@ class UrlTest{
 			for(String line : lines) {
 				System.out.println("> " + line);
 			}
-			
-		}catch (IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}

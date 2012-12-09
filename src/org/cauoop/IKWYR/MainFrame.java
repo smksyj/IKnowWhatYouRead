@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 import javax.swing.BoxLayout;
@@ -23,11 +24,12 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import org.cauoop.alg.Classifier;
 import org.cauoop.crawler.ArticleCrawler;
+import org.cauoop.data.Result;
 import org.cauoop.data.WordDatabase;
 import org.cauoop.filter.ArticleFilter;
 
-
 public class MainFrame extends JFrame {	
+	private static final int CATEGORY_RANK = 3;
 	GridBagLayout gridBagLayout;
 	JPanel panel;
 	JPanel panel_1;
@@ -164,9 +166,10 @@ public class MainFrame extends JFrame {
 		}
 	}
 
-	public void setCategoryResults(List<String> filtering) {
-		for ( int i = 0; i < this.urlpanels.size(); i++ ) {
-			this.urlpanels.get(i).SetResult(filtering.get(i));
+	public void setCategoryResults(List<Result> list) {
+		for (int i = 0; i < CATEGORY_RANK; i++) {
+			Result result = list.get(i);
+			MainFrame.this.urlpanels.get(i).SetResult(result.getCategory() + " " + result.getRatio() + "%\r\n"); 
 		}
 	}	
 }

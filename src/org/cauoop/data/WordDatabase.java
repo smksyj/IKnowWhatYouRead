@@ -1,48 +1,71 @@
 package org.cauoop.data;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.cauoop.filter.ArticleFilter;
 
 public class WordDatabase {
-//	public static void main(String[] args) {
-//		WordDatabase learn = new WordDatabase();
-//		//List<LinkedList<String>> word = new ArrayList<LinkedList<String>>();
-//		String[] test = new String[3];
-//
-//		test[0] = "han";
-//		test[1] = "hyun";
-//		test[2] = "abcd";
-//		
-//		ArticleFilter insertWord = new ArticleFilter("english", "컴퓨터가 스마트폰을 때렸대");
-//		learn.learningInsert(insertWord);
-//		learn.learningInsert(test, "한글이다");
-//		
-//		List<String> catCount = learn.categoryCount();
-//		
-//		for(int i = 0; i<catCount.size(); i++){
-//			System.out.println(catCount.get(i));
-//		}	
-//		
-//		/*List<String> wordSet = new LinkedList<String>();
-//		wordSet.add("han");
-//		wordSet.add("hyun");
-//		wordSet.add("noex");
-//		word = learn.wordStatistic(wordSet);
-//
-//		for(int i = 0; i<word.size(); i++){
-//			for(int j = 0; j<word.get(i).size(); j++){
-//				System.out.print(word.get(i).get(j)+" ");
-//			}
-//			System.out.println();
-//		}*/
-//	}
+	
+	public List<String> categoryList;
+	
+	public WordDatabase() {
+		categoryList = new LinkedList<String>();
+		categoryList.add("정치");
+		categoryList.add("경제");
+		categoryList.add("사회");
+		categoryList.add("문화");
+		categoryList.add("IT");
+		categoryList.add("한글이다");
+		categoryList.add("english");
+		Collections.sort(categoryList, new Comparator<String>() {
+			@Override
+			public int compare(String arg0, String arg1) {
+				return arg0.compareToIgnoreCase(arg1);	
+			}			
+		});
+	}
+	
+	public static void main(String[] args) {
+		WordDatabase learn = new WordDatabase();
+		//List<LinkedList<String>> word = new ArrayList<LinkedList<String>>();
+		String[] test = new String[3];
+
+		test[0] = "han";
+		test[1] = "hyun";
+		test[2] = "abcd";
+		
+		ArticleFilter insertWord = new ArticleFilter("english", "컴퓨터가 스마트폰을 때렸대");
+		learn.learningInsert(insertWord);
+		//learn.learningInsert(test, "한글이다");
+		
+		List<String> catCount = learn.categoryCount();
+		
+		for(int i = 0; i<catCount.size(); i++){
+			System.out.println(catCount.get(i));
+		}	
+		
+		/*List<String> wordSet = new LinkedList<String>();
+		wordSet.add("han");
+		wordSet.add("hyun");
+		wordSet.add("noex");
+		word = learn.wordStatistic(wordSet);
+
+		for(int i = 0; i<word.size(); i++){
+			for(int j = 0; j<word.get(i).size(); j++){
+				System.out.print(word.get(i).get(j)+" ");
+			}
+			System.out.println();
+		}*/
+	}
 
 	//Change parameter later List<String>, String cat -> List<Data>      Data is UDT made by gea chul
 	public void learningInsert(ArticleFilter word){
@@ -105,7 +128,7 @@ public class WordDatabase {
 						insertStmt.executeUpdate();*/
 					}
 				}catch(SQLException e){	//If word table wasn't exist. Create table and insert values
-					sql = "CREATE TABLE IF NOT EXISTS " + words[i] + "(category CHAR(10) NOT NULL, num INT, PRIMARY KEY(category))";
+					sql = "CREATE TABLE IF NOT EXISTS " + words[i] + " (category CHAR(10) NOT NULL, num INT, PRIMARY KEY(category))";
 					stmt.executeUpdate(sql);
 					sql = "INSERT INTO " + words[i] + " VALUES('"+cat+"', 1)";
 					stmt.executeUpdate(sql);
@@ -165,7 +188,7 @@ public class WordDatabase {
 						stmt.executeUpdate(sql);
 					}
 				}catch(SQLException e){	//If word table wasn't exist. Create table and insert values
-					sql = "CREATE TABLE IF NOT EXISTS " + words[i] + "(category CHAR(10) NOT NULL, num INT, PRIMARY KEY(category))";
+					sql = "CREATE TABLE IF NOT EXISTS " + words[i] + " (category CHAR(10) NOT NULL, num INT, PRIMARY KEY(category))";
 					stmt.executeUpdate(sql);
 					sql = "INSERT INTO " + words[i] + " VALUES('"+cat+"', 1)";
 					stmt.executeUpdate(sql);
@@ -180,9 +203,9 @@ public class WordDatabase {
 
 	public List<LinkedList<String>> wordStatistic(List<String> words){
 		Connection conn;
-		Statement stmt, inLoop;
-
-		String [] cat = {"정치","경제","사회","문화","IT","한글이다","english"};
+		Statement stmt, inLoop;		
+		
+		Collections.sort(categoryList);
 
 		List<LinkedList<String>> stat = new ArrayList<LinkedList<String>>();
 
@@ -209,11 +232,11 @@ public class WordDatabase {
 			//  .
 			//  .
 			String sql;
-			for(int i = 0; i<cat.length; i++){
+			for(int i = 0; i<categoryList.size(); i++){
 				stat.add(new LinkedList<String>());
-				stat.get(i).add(cat[i]);	//First element of each list is category name
+				stat.get(i).add(categoryList.get(i));	//First element of each list is category name
 				for(int j = 0; j<words.size(); j++){
-					sql = "SELECT num FROM " + words.get(j) + " WHERE category='" + cat[i] + "'";
+					sql = "SELECT num FROM " + words.get(j) + " WHERE category='" + categoryList.get(i) + "'";
 					ResultSet temp;
 					try{
 						temp = inLoop.executeQuery(sql);
@@ -252,7 +275,7 @@ public class WordDatabase {
 			conn = DriverManager.getConnection(jdbcUrl,userid,userPass);
 			stmt = conn.createStatement();
 			
-			String sql = "SELECT * FROM catCount";
+			String sql = "SELECT * FROM catCount ORDER BY cat ASC";
 			rs = stmt.executeQuery(sql);
 			rs.next();
 			
@@ -266,5 +289,15 @@ public class WordDatabase {
 		}
 		
 		return category;
+	}
+	
+	public void addCategory(String cat){
+		categoryList.add(cat);
+		Collections.sort(categoryList, new Comparator<String>() {
+			@Override
+			public int compare(String arg0, String arg1) {
+				return arg0.compareToIgnoreCase(arg1);	
+			}			
+		});
 	}
 }
