@@ -8,9 +8,10 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Vector;
 
 import javax.swing.BoxLayout;
@@ -24,7 +25,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import org.cauoop.alg.Classifier;
 import org.cauoop.crawler.ArticleCrawler;
-import org.cauoop.data.Result;
 import org.cauoop.data.WordDatabase;
 import org.cauoop.filter.ArticleFilter;
 
@@ -36,7 +36,10 @@ public class MainFrame extends JFrame {
 	Vector<URLPanel> urlpanels;
 	// added
 	WordDatabase database = new WordDatabase();
-	
+
+	private JButton crawlingButton;
+	private JButton analysisButton;
+
 	/**
 	 * Launch the application.
 	 */
@@ -58,7 +61,7 @@ public class MainFrame extends JFrame {
 	 */
 	public MainFrame() {
 		urlpanels= new Vector<URLPanel>();
-		
+
 		try {
 			UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
 		} catch (ClassNotFoundException e) {
@@ -74,10 +77,8 @@ public class MainFrame extends JFrame {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 
 		setTitle("IKWYR");
-		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 473, 539);
 		gridBagLayout = new GridBagLayout();
@@ -86,9 +87,9 @@ public class MainFrame extends JFrame {
 		gridBagLayout.columnWeights = new double[]{1.0, Double.MIN_VALUE};
 		gridBagLayout.rowWeights = new double[]{1.0, 1.0, 1.0, Double.MIN_VALUE};
 		getContentPane().setLayout(gridBagLayout);
-		
+
 		panel = new JPanel();
-		
+
 		GridBagConstraints gbc_panel = new GridBagConstraints();
 		gbc_panel.gridheight = 0;
 		gbc_panel.weighty = 1.0;
@@ -97,28 +98,33 @@ public class MainFrame extends JFrame {
 		gbc_panel.gridy = 1;
 		getContentPane().add(panel, gbc_panel);
 		panel.setLayout(new GridLayout(1, 0, 0, 0));
-		
+
 		JButton btnNewButton = new JButton("ADD URL");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(arg0.getActionCommand().equals("ADD URL")){
 					urlpanels.addElement(new URLPanel());
-					urlpanels.get(urlpanels.size()-1).setPreferredSize(new Dimension(450, 60));
+					urlpanels.get(urlpanels.size()-1).setPreferredSize(new Dimension(450,104));
 					MainFrame.this.panel_1.add(urlpanels.get(urlpanels.size()-1));
+					crawlingButton.setEnabled(true);
+					analysisButton.setEnabled(true);
+
 					MainFrame.this.validate();
 				}
 			}
 		});
 		panel.add(btnNewButton);
-		
-		JButton crawlingButton = new JButton("Crawling");
+
+		crawlingButton = new JButton("Crawling");
+		crawlingButton.setEnabled(false);
 		crawlingButton.addActionListener(new CrawlingListener());
 		panel.add(crawlingButton);
-		
-		JButton analysisButton = new JButton("Analysis");
+
+		analysisButton = new JButton("Analysis");
+		analysisButton.setEnabled(false);
 		analysisButton.addActionListener(new AnalysisListener());
 		panel.add(analysisButton);
-		
+
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -128,49 +134,63 @@ public class MainFrame extends JFrame {
 		gbc_scrollPane.gridx = 0;
 		gbc_scrollPane.gridy = 0;
 		getContentPane().add(scrollPane, gbc_scrollPane);
-		
+
 		panel_1 = new JPanel();
 		scrollPane.setViewportView(panel_1);
 		panel_1.setLayout(new BoxLayout(panel_1, BoxLayout.Y_AXIS));
 	}
-	
+
 	private class CrawlingListener implements ActionListener {
 		ArticleCrawler crawler = new ArticleCrawler();
-		
+
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			for ( URLPanel panel : MainFrame.this.urlpanels ) {
 				System.out.println(crawler.getHtml(panel.GetURL()));
-			
+
 				ArticleFilter filter = new ArticleFilter(panel.GetCategory(), crawler.getHtml(panel.GetURL()));
-				
+
 				database.learningInsert(filter.getSplit(), panel.GetCategory());
 			}			
 		}		
 	}
-	
+
 	private class AnalysisListener implements ActionListener {
+		private static final int NUMBER_FOR_DECIMAL_CALCULATION = 10000;
 		List<String> words = null;
 		ArticleCrawler crawler = new ArticleCrawler();
 		Classifier classifier = new Classifier();
-		
+
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			System.out.println("------------------- Analysis Start -----------------------");
+
 			for ( URLPanel panel : MainFrame.this.urlpanels ) {
 				ArticleFilter filter = new ArticleFilter(null, crawler.getHtml(panel.GetURL()));
-				words = new LinkedList<String>(Arrays.asList(filter.getSplit()));				
-			}			
-			System.out.println("------------------- Analysis Start -----------------------");
-			
-			List<LinkedList<String>> wordStatistic = database.wordStatistic(words);
-			
-			MainFrame.this.setCategoryResults(classifier.classification(wordStatistic, database.categoryCount()));
+				words = new LinkedList<String>(Arrays.asList(filter.getSplit()));
+
+				List<LinkedList<String>> wordStatistic = database.wordStatistic(words);
+				List<String> results = classifier.classification(wordStatistic, database.categoryCount());
+				Collections.sort(results, new Comparator<String>() {
+					@Override
+					public int compare(String category1, String category2) {
+						String percent1 = category1.substring(category1.indexOf(":") + 2, category1.indexOf("%")-1);
+						String percent2 = category2.substring(category2.indexOf(":") + 2, category2.indexOf("%")-1);
+						return (int) (Double.parseDouble(percent2) * NUMBER_FOR_DECIMAL_CALCULATION - Double.parseDouble(percent1) * NUMBER_FOR_DECIMAL_CALCULATION);
+					}
+				});
+
+				StringBuilder panelValue = new StringBuilder();
+				for (int i = 0; i < CATEGORY_RANK; i++ ) {
+					if ( i == CATEGORY_RANK - 1 ) {
+						panelValue.append(results.get(i));						
+					} else {
+						panelValue.append(results.get(i)).append("\r\n");
+					}
+				}
+
+				panel.SetResult(panelValue.toString());
+			}
 		}
 	}
-
-	public void setCategoryResults(List<String> classificationResult) {
-		for ( int i = 0; i < this.urlpanels.size(); i++ ) {
-			this.urlpanels.get(i).SetResult(classificationResult.get(i));
-		}
-	}	
 }

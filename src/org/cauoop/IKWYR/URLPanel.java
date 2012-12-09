@@ -1,14 +1,16 @@
 package org.cauoop.IKWYR;
 
+import javax.swing.BoxLayout;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class URLPanel extends JPanel {
 	private JTextField urlInputField;
-	private JTextField resultField;
+	CategoryPanel textPane;
 
 	/**
 	 * Create the panel.
@@ -18,12 +20,12 @@ public class URLPanel extends JPanel {
 		urlInputField = new JTextField();
 		urlInputField.setColumns(10);
 		
-		resultField = new JTextField();
-		resultField.setColumns(10);
-		
 		JLabel lblUrl = new JLabel("URL \uC785\uB825");
 		
 		JLabel lblNewLabel = new JLabel("카테고리");
+		
+		textPane = new CategoryPanel();
+		
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -35,8 +37,8 @@ public class URLPanel extends JPanel {
 					.addGap(18)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addComponent(lblNewLabel)
-						.addComponent(resultField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap(21, Short.MAX_VALUE))
+						.addComponent(textPane, GroupLayout.PREFERRED_SIZE, 113, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap(22, Short.MAX_VALUE))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -45,12 +47,13 @@ public class URLPanel extends JPanel {
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblNewLabel)
 						.addComponent(lblUrl))
-					.addGap(3)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addComponent(urlInputField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(resultField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+						.addComponent(textPane, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap(25, Short.MAX_VALUE))
 		);
+		textPane.setLayout(new BoxLayout(textPane, BoxLayout.X_AXIS));
 		setLayout(groupLayout);
 
 	}
@@ -59,10 +62,11 @@ public class URLPanel extends JPanel {
 		return this.urlInputField.getText();
 	}
 	public void SetResult(String result){
-		this.resultField.setText(result);
+		this.textPane.textArea.setText(result);
+		this.textPane.textArea.setCaretPosition(0);
 	}
 
 	public String GetCategory() {
-		return this.resultField.getText();
+		return this.textPane.textArea.getText();
 	}
 }
