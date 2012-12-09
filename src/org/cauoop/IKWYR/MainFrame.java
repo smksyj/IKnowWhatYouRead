@@ -160,6 +160,7 @@ public class MainFrame extends JFrame {
 				ArticleFilter filter = new ArticleFilter(null, crawler.getHtml(panel.GetURL()));
 				words = new LinkedList<String>(Arrays.asList(filter.getSplit()));				
 			}			
+			System.out.println("------------------- Analysis Start -----------------------");
 			
 			List<LinkedList<String>> wordStatistic = database.wordStatistic(words);
 			

@@ -18,12 +18,12 @@ public class WordDatabase {
 	
 	public WordDatabase() {
 		categoryList = new LinkedList<String>();
-		categoryList.add("��ġ");
-		categoryList.add("����");
-		categoryList.add("��ȸ");
-		categoryList.add("��ȭ");
+		categoryList.add("정치");
+		categoryList.add("경제");
+		categoryList.add("사회");
+		categoryList.add("문화");
 		categoryList.add("IT");
-		categoryList.add("�ѱ��̴�");
+		categoryList.add("한글이다");
 		categoryList.add("english");
 		categoryList.add("포탈");
 		Collections.sort(categoryList, new Comparator<String>() {
