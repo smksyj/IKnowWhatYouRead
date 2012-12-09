@@ -10,12 +10,12 @@ import java.awt.event.ActionListener;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Vector;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
@@ -24,18 +24,20 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import org.cauoop.alg.Classifier;
 import org.cauoop.crawler.ArticleCrawler;
-import org.cauoop.data.Result;
 import org.cauoop.data.WordDatabase;
 import org.cauoop.filter.ArticleFilter;
 
+
 public class MainFrame extends JFrame {	
-	private static final int CATEGORY_RANK = 3;
 	GridBagLayout gridBagLayout;
 	JPanel panel;
 	JPanel panel_1;
 	Vector<URLPanel> urlpanels;
 	// added
 	WordDatabase database = new WordDatabase();
+	
+	private JButton crawlingButton;
+	private JButton analysisButton;
 	
 	/**
 	 * Launch the application.
@@ -77,7 +79,6 @@ public class MainFrame extends JFrame {
 		
 
 		setTitle("IKWYR");
-		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 473, 539);
 		gridBagLayout = new GridBagLayout();
@@ -103,19 +104,24 @@ public class MainFrame extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				if(arg0.getActionCommand().equals("ADD URL")){
 					urlpanels.addElement(new URLPanel());
-					urlpanels.get(urlpanels.size()-1).setPreferredSize(new Dimension(450, 60));
+					urlpanels.get(urlpanels.size()-1).setPreferredSize(new Dimension(450,104));
 					MainFrame.this.panel_1.add(urlpanels.get(urlpanels.size()-1));
+					crawlingButton.setEnabled(true);
+					analysisButton.setEnabled(true);
+					
 					MainFrame.this.validate();
 				}
 			}
 		});
 		panel.add(btnNewButton);
 		
-		JButton crawlingButton = new JButton("Crawling");
+		crawlingButton = new JButton("Crawling");
+		crawlingButton.setEnabled(false);
 		crawlingButton.addActionListener(new CrawlingListener());
 		panel.add(crawlingButton);
 		
-		JButton analysisButton = new JButton("Analysis");
+		analysisButton = new JButton("Analysis");
+		analysisButton.setEnabled(false);
 		analysisButton.addActionListener(new AnalysisListener());
 		panel.add(analysisButton);
 		
@@ -139,6 +145,21 @@ public class MainFrame extends JFrame {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			Boolean temp= false;
+			
+			for(URLPanel panel: MainFrame.this.urlpanels){
+				if(panel.GetURL().length()<9){
+					temp= true;
+				}
+				if(!panel.GetURL().substring(0,7).equals("http://")&& !panel.GetURL().substring(0,8).equals("https://")){
+					temp= true;
+				}
+			}
+			if(temp== true){
+				JOptionPane.showMessageDialog(null, "Invalid URL");
+				return;
+			}
+			
 			for ( URLPanel panel : MainFrame.this.urlpanels ) {
 				System.out.println(crawler.getHtml(panel.GetURL()));
 				
@@ -151,25 +172,16 @@ public class MainFrame extends JFrame {
 	
 	private class AnalysisListener implements ActionListener {
 		List<String> words = null;
-		ArticleCrawler crawler = new ArticleCrawler();
 		Classifier classifier = new Classifier();
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			for ( URLPanel panel : MainFrame.this.urlpanels ) {
-				ArticleFilter filter = new ArticleFilter(null, crawler.getHtml(panel.GetURL()));
-				words = new LinkedList<String>(Arrays.asList(filter.getSplit()));				
+				ArticleFilter filter = new ArticleFilter(null, panel.GetURL());
+				words = new LinkedList<String>(Arrays.asList(filter.getSplit()));
 			}			
 			
 			List<LinkedList<String>> wordStatistic = database.wordStatistic(words);
-			
-			MainFrame.this.setCategoryResults(classifier.classification(wordStatistic, database.categoryCount()));
 		}
 	}
-
-	public void setCategoryResults(List<String> classificationResult) {
-		for ( int i = 0; i < this.urlpanels.size(); i++ ) {
-			this.urlpanels.get(i).SetResult(classificationResult.get(i));
-		}
-	}	
 }

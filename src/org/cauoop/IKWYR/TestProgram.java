@@ -22,15 +22,15 @@ public class TestProgram extends JFrame {
 		Document document = Jsoup.connect("http://news.naver.com/main/president2012/news/read.nhn?mid=hot&sid1=154&cid=909465&iid=573039&oid=001&aid=0005978319&ptype=011").get();
 		Elements select = document.select("#articleBody");
 		
-		ArticleFilter filter = new ArticleFilter("정치", select.text());
+		ArticleFilter filter = new ArticleFilter("��ġ", select.text());
 		
 		WordDatabase database = new WordDatabase();
 		
-//		database.learningInsert(new LinkedList<String>(Arrays.asList(filter.getSplit())), filter.getCategory());
+		database.learningInsert(filter.getSplit(), filter.getCategory());
 		
-		List<String> wordList = new LinkedList<String>();
-		wordList.add("박근혜");
-		wordList.add("문재인");
+		List<String> wordList = new LinkedList<>();
+		wordList.add("�ڱ���");
+		wordList.add("������");
 		
 		List<LinkedList<String>> wordStatistic = database.wordStatistic(wordList);
 		
