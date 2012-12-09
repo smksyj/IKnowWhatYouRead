@@ -7,13 +7,13 @@ public class Classifier {
 	public Classifier() {
 		
 	}
-	public List<String> filtering(List<LinkedList<String>> wordStatistic, List<String> numOfReadingArticle) {
+	public List<String> classification(List<LinkedList<String>> wordStatistic, List<String> numOfReadingArticle) {
 		double sum = 0;
-		
 		double[] categoryCount = new double[wordStatistic.size()];
 		int[] wordSum = new int[wordStatistic.get(0).size()];
+		LinkedList<String> result = new LinkedList<String>();
 		
-		//Ã¹¹øÂ° getÀÌ Ä«Å×°í¸® °¹¼ö i, µÎ¹øÂ° getÀÌ ´Ü¾î°¹¼ö j
+		//ì²«ë²ˆì§¸ getì´ ì¹´í…Œê³ ë¦¬ ê°¯ìˆ˜ i, ë‘ë²ˆì§¸ getì´ ë‹¨ì–´ê°¯ìˆ˜ j
 		for ( int i = 0; i < wordStatistic.size(); i++ ) {
 			for(int j= 0 ; j < wordStatistic.get(0).size() ; j++){
 				wordSum[j] += Integer.parseInt(wordStatistic.get(i).get(j));
@@ -25,27 +25,28 @@ public class Classifier {
 			
 			for ( int j = 0; j < wordStatistic.get(0).size(); j++ ) {
 				if(Integer.parseInt(wordStatistic.get(i).get(j))==0){
-					categoryCount[i] *= (double)1/Double.parseDouble(numOfReadingArticle.get(i));
+					categoryCount[i] *= (double)1/Double.parseDouble(numOfReadingArticle.get(i*2+1));
 				}else{
-					categoryCount[i] *= (double)(Integer.parseInt(wordStatistic.get(i).get(j)))/Double.parseDouble(numOfReadingArticle.get(i));
+					categoryCount[i] *= (double)(Integer.parseInt(wordStatistic.get(i).get(j)))/Double.parseDouble(numOfReadingArticle.get(i*2+1));
 				}
 			}
+		}
+		for ( int i = 0; i < categoryCount.length; i++ ) {
+			sum += categoryCount[i];
 		}
 //
 //		for (int i = 0; i < categoryCount.length; i++) {
 //			System.out.println(categoryCount[i]);
 //		}
-//
-//		for ( int i = 0; i < categoryCount.length; i++ ) {
-//			sum += categoryCount[i];
-//		}
-//
 //		System.out.println("sum : " + sum);
-//
-//		for ( int i = 0; i < categoryCount.length; i++ ) {
-//			System.out.println("percentage : " + categoryCount[i]/(double)sum);
-//		}		
 
-		return new LinkedList<String>();
+		for ( int i = 0; i < categoryCount.length; i++ ) {
+			System.out.println(numOfReadingArticle.get(i)+" : " + (categoryCount[i]/(double)sum)*100 +"%");
+			result.add(numOfReadingArticle.get(i)+" : " + (categoryCount[i]/(double)sum)*100 + "%");
+		}		
+
+		return result;
 	}
+	
+	
 }

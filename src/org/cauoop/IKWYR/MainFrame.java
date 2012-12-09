@@ -160,13 +160,13 @@ public class MainFrame extends JFrame {
 			
 			List<LinkedList<String>> wordStatistic = database.wordStatistic(words);
 			
-			MainFrame.this.setCategoryResults(classifier.filtering(wordStatistic, database.categoryCount()));
+			MainFrame.this.setCategoryResults(classifier.classification(wordStatistic, database.categoryCount()));
 		}
 	}
 
-	public void setCategoryResults(List<String> filtering) {
+	public void setCategoryResults(List<String> classificationResult) {
 		for ( int i = 0; i < this.urlpanels.size(); i++ ) {
-			this.urlpanels.get(i).SetResult(filtering.get(i));
+			this.urlpanels.get(i).SetResult(classificationResult.get(i));
 		}
 	}	
 }

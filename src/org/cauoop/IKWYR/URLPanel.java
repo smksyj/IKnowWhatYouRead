@@ -23,7 +23,7 @@ public class URLPanel extends JPanel {
 		
 		JLabel lblUrl = new JLabel("URL \uC785\uB825");
 		
-		JLabel lblNewLabel = new JLabel("Ä«Å×°í¸®");
+		JLabel lblNewLabel = new JLabel("ì¹´í…Œê³ ë¦¬");
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)

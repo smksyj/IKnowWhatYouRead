@@ -20,9 +20,9 @@ public class WordDatabase {
 //		test[1] = "hyun";
 //		test[2] = "abcd";
 //		
-//		ArticleFilter insertWord = new ArticleFilter("english", "ÄÄÇ»ÅÍ°¡ ½º¸¶Æ®ÆùÀ» ¶§·È´ë");
+//		ArticleFilter insertWord = new ArticleFilter("english", "ì»´í“¨í„°ê°€ ìŠ¤ë§ˆíŠ¸í°ì„ ë•Œë ¸ëŒ€");
 //		learn.learningInsert(insertWord);
-//		learn.learningInsert(test, "ÇÑ±ÛÀÌ´Ù");
+//		learn.learningInsert(test, "í•œê¸€ì´ë‹¤");
 //		
 //		List<String> catCount = learn.categoryCount();
 //		
@@ -182,7 +182,7 @@ public class WordDatabase {
 		Connection conn;
 		Statement stmt, inLoop;
 
-		String [] cat = {"Á¤Ä¡","°æÁ¦","»çÈ¸","¹®È­","IT","ÇÑ±ÛÀÌ´Ù","english"};
+		String [] cat = {"ì •ì¹˜","ê²½ì œ","ì‚¬íšŒ","ë¬¸í™”","IT","í•œê¸€ì´ë‹¤","english"};
 
 		List<LinkedList<String>> stat = new ArrayList<LinkedList<String>>();
 
@@ -202,7 +202,7 @@ public class WordDatabase {
 			inLoop = conn.createStatement();
 
 			//		->stat -- arraylist
-			//		 cat1  cat2  cat3 ...	¡é
+			//		 cat1  cat2  cat3 ...	â†“
 			//word1   3      0	   2		stat.get(i).get(j)
 			//word2   2     10     7
 			//word3   1      4     8
