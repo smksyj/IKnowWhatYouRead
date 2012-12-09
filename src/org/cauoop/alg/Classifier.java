@@ -1,11 +1,7 @@
 package org.cauoop.alg;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 public class Classifier {
 	public Classifier() {
@@ -30,19 +26,19 @@ public class Classifier {
 				}
 			}
 		}
-
-		for (int i = 0; i < categoryCount.length; i++ ) {
-			System.out.println(numOfReadingArticle.get(i*2) + " : " + categoryCount[i]);
-		}
+//
+//		for (int i = 0; i < categoryCount.length; i++ ) {
+//			System.out.println(numOfReadingArticle.get(i*2) + " : " + categoryCount[i]);
+//		}
 
 		for ( int i = 0; i < categoryCount.length; i++ ) {
 			sum += categoryCount[i];
 		}
-
-		System.out.println("sum : " + sum);
-
+//
+//		System.out.println("sum : " + sum);
+//
 		for ( int i = 0; i < categoryCount.length; i++ ) {
-			System.out.println(numOfReadingArticle.get(i*2)+" : " + (categoryCount[i]/(double)sum)*100 +"%");
+//			System.out.println(numOfReadingArticle.get(i*2)+" : " + (categoryCount[i]/(double)sum)*100 +"%");
 			result.add(numOfReadingArticle.get(i*2)+" : " + (categoryCount[i]/(double)sum)*100 + "%");
 		}		
 

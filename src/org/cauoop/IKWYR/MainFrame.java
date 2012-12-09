@@ -30,12 +30,13 @@ import org.cauoop.filter.ArticleFilter;
 
 public class MainFrame extends JFrame {	
 	private static final int CATEGORY_RANK = 3;
-	GridBagLayout gridBagLayout;
-	JPanel panel;
-	JPanel panel_1;
-	Vector<URLPanel> urlpanels;
+	private GridBagLayout gridBagLayout;
+	private JPanel buttonPanel;
+	private JPanel inputPanel;
+	private Vector<URLPanel> urlpanels;
 	// added
-	WordDatabase database = new WordDatabase();
+	private WordDatabase database = new WordDatabase();
+	private ArticleCrawler crawler = new ArticleCrawler();
 
 	private JButton crawlingButton;
 	private JButton analysisButton;
@@ -88,7 +89,7 @@ public class MainFrame extends JFrame {
 		gridBagLayout.rowWeights = new double[]{1.0, 1.0, 1.0, Double.MIN_VALUE};
 		getContentPane().setLayout(gridBagLayout);
 
-		panel = new JPanel();
+		buttonPanel = new JPanel();
 
 		GridBagConstraints gbc_panel = new GridBagConstraints();
 		gbc_panel.gridheight = 0;
@@ -96,8 +97,8 @@ public class MainFrame extends JFrame {
 		gbc_panel.fill = GridBagConstraints.BOTH;
 		gbc_panel.gridx = 0;
 		gbc_panel.gridy = 1;
-		getContentPane().add(panel, gbc_panel);
-		panel.setLayout(new GridLayout(1, 0, 0, 0));
+		getContentPane().add(buttonPanel, gbc_panel);
+		buttonPanel.setLayout(new GridLayout(1, 0, 0, 0));
 
 		JButton btnNewButton = new JButton("ADD URL");
 		btnNewButton.addActionListener(new ActionListener() {
@@ -105,7 +106,7 @@ public class MainFrame extends JFrame {
 				if(arg0.getActionCommand().equals("ADD URL")){
 					urlpanels.addElement(new URLPanel());
 					urlpanels.get(urlpanels.size()-1).setPreferredSize(new Dimension(450,104));
-					MainFrame.this.panel_1.add(urlpanels.get(urlpanels.size()-1));
+					MainFrame.this.inputPanel.add(urlpanels.get(urlpanels.size()-1));
 					crawlingButton.setEnabled(true);
 					analysisButton.setEnabled(true);
 
@@ -113,17 +114,17 @@ public class MainFrame extends JFrame {
 				}
 			}
 		});
-		panel.add(btnNewButton);
+		buttonPanel.add(btnNewButton);
 
 		crawlingButton = new JButton("Crawling");
 		crawlingButton.setEnabled(false);
 		crawlingButton.addActionListener(new CrawlingListener());
-		panel.add(crawlingButton);
+		buttonPanel.add(crawlingButton);
 
 		analysisButton = new JButton("Analysis");
 		analysisButton.setEnabled(false);
 		analysisButton.addActionListener(new AnalysisListener());
-		panel.add(analysisButton);
+		buttonPanel.add(analysisButton);
 
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -135,13 +136,13 @@ public class MainFrame extends JFrame {
 		gbc_scrollPane.gridy = 0;
 		getContentPane().add(scrollPane, gbc_scrollPane);
 
-		panel_1 = new JPanel();
-		scrollPane.setViewportView(panel_1);
-		panel_1.setLayout(new BoxLayout(panel_1, BoxLayout.Y_AXIS));
+		inputPanel = new JPanel();
+		scrollPane.setViewportView(inputPanel);
+		inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.Y_AXIS));
 	}
 
 	private class CrawlingListener implements ActionListener {
-		ArticleCrawler crawler = new ArticleCrawler();
+//		ArticleCrawler crawler = new ArticleCrawler();
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -158,12 +159,11 @@ public class MainFrame extends JFrame {
 	private class AnalysisListener implements ActionListener {
 		private static final int NUMBER_FOR_DECIMAL_CALCULATION = 10000;
 		List<String> words = null;
-		ArticleCrawler crawler = new ArticleCrawler();
 		Classifier classifier = new Classifier();
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			System.out.println("------------------- Analysis Start -----------------------");
+//			System.out.println("------------------- Analysis Start -----------------------");
 
 			for ( URLPanel panel : MainFrame.this.urlpanels ) {
 				ArticleFilter filter = new ArticleFilter(null, crawler.getHtml(panel.GetURL()));

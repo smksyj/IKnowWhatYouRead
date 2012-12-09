@@ -49,9 +49,9 @@ public class WordDatabase {
 		
 		List<String> catCount = learn.categoryCount();
 		
-		for(int i = 0; i<catCount.size(); i++){
-			System.out.println(catCount.get(i));
-		}	
+//		for(int i = 0; i<catCount.size(); i++){
+//			System.out.println(catCount.get(i));
+//		}	
 		
 		/*List<String> wordSet = new LinkedList<String>();
 		wordSet.add("han");
@@ -185,7 +185,7 @@ public class WordDatabase {
 					continue;
 				}
 				String sql = "UPDATE " + words[i] + " SET num=num+1 WHERE category='" + cat + "'";
-				System.out.println(words[i]);
+//				System.out.println(words[i]);
 				try{
 					if(stmt.executeUpdate(sql)==0){	//Table is exist but have no row category=word.get(0)
 						sql = "INSERT INTO " + words[i] + " VALUES('"+cat+"', 1)";
@@ -201,8 +201,7 @@ public class WordDatabase {
 			conn.close();
 			stmt.close();
 		}catch(SQLException e){
-			System.out.println("fail... "+e.getMessage());
-			
+			System.out.println("fail... "+e.getMessage());			
 		}
 	}
 
