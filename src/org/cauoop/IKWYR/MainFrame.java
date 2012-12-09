@@ -27,6 +27,13 @@ import org.cauoop.alg.Classifier;
 import org.cauoop.crawler.ArticleCrawler;
 import org.cauoop.data.WordDatabase;
 import org.cauoop.filter.ArticleFilter;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class MainFrame extends JFrame {	
 	private static final int CATEGORY_RANK = 3;
@@ -81,7 +88,7 @@ public class MainFrame extends JFrame {
 
 		setTitle("IKWYR");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 473, 539);
+		setBounds(100, 100, 520, 539);
 		gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[] {0, 0};
 		gridBagLayout.rowHeights = new int[]{0, 0, 0, 0};
@@ -92,20 +99,19 @@ public class MainFrame extends JFrame {
 		buttonPanel = new JPanel();
 
 		GridBagConstraints gbc_panel = new GridBagConstraints();
-		gbc_panel.gridheight = 0;
+		gbc_panel.gridheight = 3;
 		gbc_panel.weighty = 1.0;
 		gbc_panel.fill = GridBagConstraints.BOTH;
 		gbc_panel.gridx = 0;
 		gbc_panel.gridy = 1;
 		getContentPane().add(buttonPanel, gbc_panel);
-		buttonPanel.setLayout(new GridLayout(1, 0, 0, 0));
 
 		JButton btnNewButton = new JButton("ADD URL");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(arg0.getActionCommand().equals("ADD URL")){
 					urlpanels.addElement(new URLPanel());
-					urlpanels.get(urlpanels.size()-1).setPreferredSize(new Dimension(450,104));
+					urlpanels.get(urlpanels.size()-1).setPreferredSize(new Dimension(485,104));
 					MainFrame.this.inputPanel.add(urlpanels.get(urlpanels.size()-1));
 					crawlingButton.setEnabled(true);
 					analysisButton.setEnabled(true);
@@ -114,23 +120,63 @@ public class MainFrame extends JFrame {
 				}
 			}
 		});
-		buttonPanel.add(btnNewButton);
 
 		crawlingButton = new JButton("Crawling");
 		crawlingButton.setEnabled(false);
 		crawlingButton.addActionListener(new CrawlingListener());
-		buttonPanel.add(crawlingButton);
 
 		analysisButton = new JButton("Analysis");
 		analysisButton.setEnabled(false);
 		analysisButton.addActionListener(new AnalysisListener());
-		buttonPanel.add(analysisButton);
+		
+		JComboBox comboBox = new JComboBox();
+		comboBox.setModel(new DefaultComboBoxModel(new String[] {"None", "\uC815\uCE58", "\uACBD\uC81C", "IT", "\uC0AC\uD68C", "\uBB38\uD654", "\uD3EC\uD0C8", "\uD55C\uAE00\uC774\uB2E4", "english"}));
+
+		JButton btnNewButton_1 = new JButton("Portal");
+		btnNewButton_1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				//////////////////////////////////포탈 버튼 구현//////////////////////////////////////////////
+			}
+		});
+		GroupLayout gl_buttonPanel = new GroupLayout(buttonPanel);
+		gl_buttonPanel.setHorizontalGroup(
+			gl_buttonPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_buttonPanel.createSequentialGroup()
+					.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 152, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_buttonPanel.createParallelGroup(Alignment.TRAILING)
+						.addGroup(gl_buttonPanel.createSequentialGroup()
+							.addComponent(btnNewButton_1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, 82, GroupLayout.PREFERRED_SIZE))
+						.addComponent(crawlingButton, GroupLayout.PREFERRED_SIZE, 186, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(analysisButton, GroupLayout.PREFERRED_SIZE, 152, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap())
+		);
+		gl_buttonPanel.setVerticalGroup(
+			gl_buttonPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_buttonPanel.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_buttonPanel.createParallelGroup(Alignment.LEADING)
+						.addComponent(btnNewButton, GroupLayout.DEFAULT_SIZE, 84, Short.MAX_VALUE)
+						.addGroup(gl_buttonPanel.createSequentialGroup()
+							.addGroup(gl_buttonPanel.createParallelGroup(Alignment.BASELINE)
+								.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
+								.addComponent(btnNewButton_1))
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(crawlingButton, GroupLayout.DEFAULT_SIZE, 53, Short.MAX_VALUE))
+						.addComponent(analysisButton, GroupLayout.DEFAULT_SIZE, 84, Short.MAX_VALUE))
+					.addContainerGap())
+		);
+		buttonPanel.setLayout(gl_buttonPanel);
 
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
-		gbc_scrollPane.weighty = 8.0;
+		gbc_scrollPane.weighty = 30.0;
 		gbc_scrollPane.fill = GridBagConstraints.BOTH;
 		gbc_scrollPane.gridx = 0;
 		gbc_scrollPane.gridy = 0;
