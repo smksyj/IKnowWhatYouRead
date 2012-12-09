@@ -47,6 +47,8 @@ public class MainFrame extends JFrame {
 
 	private JButton crawlingButton;
 	private JButton analysisButton;
+	private JComboBox<String> categoryComboBox;
+	private JButton portalCrawling;
 
 	/**
 	 * Launch the application.
@@ -129,16 +131,28 @@ public class MainFrame extends JFrame {
 		analysisButton.setEnabled(false);
 		analysisButton.addActionListener(new AnalysisListener());
 		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setModel(new DefaultComboBoxModel(new String[] {"None", "\uC815\uCE58", "\uACBD\uC81C", "IT", "\uC0AC\uD68C", "\uBB38\uD654", "\uD3EC\uD0C8", "\uD55C\uAE00\uC774\uB2E4", "english"}));
-
-		JButton btnNewButton_1 = new JButton("Portal");
-		btnNewButton_1.addMouseListener(new MouseAdapter() {
+		categoryComboBox = new JComboBox<String>();
+		categoryComboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"None", "\uC815\uCE58", "\uACBD\uC81C", "IT", "\uC0AC\uD68C", "\uBB38\uD654", "\uD3EC\uD0C8", "\uD55C\uAE00\uC774\uB2E4", "english"}));
+		categoryComboBox.addActionListener(new ActionListener() {			
 			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				//////////////////////////////////포탈 버튼 구현//////////////////////////////////////////////
+			public void actionPerformed(ActionEvent e) {
+				if ( categoryComboBox.getSelectedItem().toString().equals("None") ) {
+					portalCrawling.setEnabled(false);
+				} else {
+					portalCrawling.setEnabled(true);
+				}				
 			}
 		});
+
+		portalCrawling = new JButton("Portal");
+		portalCrawling.setEnabled(false);
+		portalCrawling.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				database.learningInsert(crawler.autoGet((String) categoryComboBox.getSelectedItem()).split(" "), (String) categoryComboBox.getSelectedItem());
+			}
+		});
+		
 		GroupLayout gl_buttonPanel = new GroupLayout(buttonPanel);
 		gl_buttonPanel.setHorizontalGroup(
 			gl_buttonPanel.createParallelGroup(Alignment.LEADING)
@@ -147,9 +161,9 @@ public class MainFrame extends JFrame {
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_buttonPanel.createParallelGroup(Alignment.TRAILING)
 						.addGroup(gl_buttonPanel.createSequentialGroup()
-							.addComponent(btnNewButton_1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addComponent(portalCrawling, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, 82, GroupLayout.PREFERRED_SIZE))
+							.addComponent(categoryComboBox, GroupLayout.PREFERRED_SIZE, 82, GroupLayout.PREFERRED_SIZE))
 						.addComponent(crawlingButton, GroupLayout.PREFERRED_SIZE, 186, GroupLayout.PREFERRED_SIZE))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(analysisButton, GroupLayout.PREFERRED_SIZE, 152, GroupLayout.PREFERRED_SIZE)
@@ -163,8 +177,8 @@ public class MainFrame extends JFrame {
 						.addComponent(btnNewButton, GroupLayout.DEFAULT_SIZE, 84, Short.MAX_VALUE)
 						.addGroup(gl_buttonPanel.createSequentialGroup()
 							.addGroup(gl_buttonPanel.createParallelGroup(Alignment.BASELINE)
-								.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
-								.addComponent(btnNewButton_1))
+								.addComponent(categoryComboBox, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
+								.addComponent(portalCrawling))
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(crawlingButton, GroupLayout.DEFAULT_SIZE, 53, Short.MAX_VALUE))
 						.addComponent(analysisButton, GroupLayout.DEFAULT_SIZE, 84, Short.MAX_VALUE))

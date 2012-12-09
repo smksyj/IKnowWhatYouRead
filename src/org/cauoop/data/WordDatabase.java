@@ -26,6 +26,7 @@ public class WordDatabase {
 		categoryList.add("한글이다");
 		categoryList.add("english");
 		categoryList.add("포탈");
+		
 		Collections.sort(categoryList, new Comparator<String>() {
 			@Override
 			public int compare(String arg0, String arg1) {
