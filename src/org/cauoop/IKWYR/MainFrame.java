@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 import javax.swing.BoxLayout;
@@ -23,11 +24,12 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import org.cauoop.alg.Classifier;
 import org.cauoop.crawler.ArticleCrawler;
+import org.cauoop.data.Result;
 import org.cauoop.data.WordDatabase;
 import org.cauoop.filter.ArticleFilter;
 
-
 public class MainFrame extends JFrame {	
+	private static final int CATEGORY_RANK = 3;
 	GridBagLayout gridBagLayout;
 	JPanel panel;
 	JPanel panel_1;
@@ -149,13 +151,14 @@ public class MainFrame extends JFrame {
 	
 	private class AnalysisListener implements ActionListener {
 		List<String> words = null;
+		ArticleCrawler crawler = new ArticleCrawler();
 		Classifier classifier = new Classifier();
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			for ( URLPanel panel : MainFrame.this.urlpanels ) {
-				ArticleFilter filter = new ArticleFilter(null, panel.GetURL());
-				words = new LinkedList<String>(Arrays.asList(filter.getSplit()));
+				ArticleFilter filter = new ArticleFilter(null, crawler.getHtml(panel.GetURL()));
+				words = new LinkedList<String>(Arrays.asList(filter.getSplit()));				
 			}			
 			
 			List<LinkedList<String>> wordStatistic = database.wordStatistic(words);
