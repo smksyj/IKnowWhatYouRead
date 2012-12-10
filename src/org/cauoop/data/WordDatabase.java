@@ -58,13 +58,17 @@ public class WordDatabase {
 			stmt = conn.createStatement();
 			
 			String sql = "SELECT * FROM catCount ORDER BY cat ASC";
-			rs = stmt.executeQuery(sql);
-			rs.next();
-			
-			while(!rs.isAfterLast()){
-				category.add(rs.getString(1));
+			try{
+				rs = stmt.executeQuery(sql);
 				rs.next();
-			}			
+				
+				while(!rs.isAfterLast()){
+					category.add(rs.getString(1));
+					rs.next();
+				}	
+			}catch(SQLException e){
+				
+			}				
 		}catch(SQLException e){
 			System.out.println("fail... "+e.getMessage());
 		}
