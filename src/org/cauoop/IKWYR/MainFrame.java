@@ -149,7 +149,10 @@ public class MainFrame extends JFrame {
 		portalCrawling.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				database.learningInsert(crawler.autoGet((String) categoryComboBox.getSelectedItem()).split(" "), (String) categoryComboBox.getSelectedItem());
+				String words = crawler.autoGet((String) categoryComboBox.getSelectedItem());
+				if ( words != null ) {
+					database.learningInsert(words.split(" "), (String) categoryComboBox.getSelectedItem());
+				}
 			}
 		});
 		
@@ -234,8 +237,8 @@ public class MainFrame extends JFrame {
 				Collections.sort(results, new Comparator<String>() {
 					@Override
 					public int compare(String category1, String category2) {
-						String percent1 = category1.substring(category1.indexOf(":") + 2, category1.indexOf("%")-1);
-						String percent2 = category2.substring(category2.indexOf(":") + 2, category2.indexOf("%")-1);
+						String percent1 = category1.substring(category1.indexOf(":") + 2, category1.indexOf(":")+5);
+						String percent2 = category2.substring(category2.indexOf(":") + 2, category2.indexOf(":")+5);
 						return (int) (Double.parseDouble(percent2) * NUMBER_FOR_DECIMAL_CALCULATION - Double.parseDouble(percent1) * NUMBER_FOR_DECIMAL_CALCULATION);
 					}
 				});
