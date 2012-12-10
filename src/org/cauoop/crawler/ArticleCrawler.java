@@ -69,10 +69,10 @@ public class ArticleCrawler {
 			String naver_politics = selectGet("http://news.naver.com/main/main.nhn?mode=LSD&mid=shm&sid1=100", ".section_headline", "sectionList.nhn");
 			String daum_politics = selectGet("http://media.daum.net/politics", ".wrap_newsitem", "");
 			return naver_politics + " " + daum_politics;
-		} else if(category.equalsIgnoreCase("economic")) {
-			String naver_economic = selectGet("http://news.naver.com/main/main.nhn?mode=LSD&mid=shm&sid1=101", ".section_headline", "sectionList.nhn");
-			String daum_economic = selectGet("http://media.daum.net/economic", ".wrap_newsitem", "");
-			return naver_economic + daum_economic;
+		} else if(category.equalsIgnoreCase("economy")) {
+			String naver_economy = selectGet("http://news.naver.com/main/main.nhn?mode=LSD&mid=shm&sid1=101", ".section_headline", "sectionList.nhn");
+			String daum_economy = selectGet("http://media.daum.net/economic", ".wrap_newsitem", "");
+			return naver_economy + daum_economy;
 		} else if(category.equalsIgnoreCase("society")) {
 			String naver_society = selectGet("http://news.naver.com/main/main.nhn?mode=LSD&mid=shm&sid1=102", ".section_headline", "sectionList.nhn");
 			String daum_society = selectGet("http://media.daum.net/society", ".wrap_newsitem", "");
