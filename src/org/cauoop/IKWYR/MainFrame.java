@@ -132,7 +132,7 @@ public class MainFrame extends JFrame {
 		analysisButton.addActionListener(new AnalysisListener());
 		
 		categoryComboBox = new JComboBox<String>();
-		categoryComboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"None", "\uC815\uCE58", "\uACBD\uC81C", "IT", "\uC0AC\uD68C", "\uBB38\uD654", "\uD3EC\uD0C8", "\uD55C\uAE00\uC774\uB2E4", "english"}));
+		categoryComboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"None", "politics", "economy", "society", "world", "entertain", "tech"}));
 		categoryComboBox.addActionListener(new ActionListener() {			
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -211,10 +211,11 @@ public class MainFrame extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			for ( URLPanel panel : MainFrame.this.urlpanels ) {
 //				System.out.println(crawler.getHtml(panel.GetURL()));
+				if ( !panel.GetCategory().equals("") ) {
+					ArticleFilter filter = new ArticleFilter(panel.GetCategory(), crawler.getHtml(panel.GetURL()));
 
-				ArticleFilter filter = new ArticleFilter(panel.GetCategory(), crawler.getHtml(panel.GetURL()));
-
-				database.learningInsert(filter.getSplit(), panel.GetCategory());
+					database.learningInsert(filter.getSplit(), panel.GetCategory());
+				}
 			}			
 		}		
 	}
