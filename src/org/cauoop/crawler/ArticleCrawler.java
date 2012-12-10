@@ -77,7 +77,7 @@ public class ArticleCrawler {
 			value += Integer.parseInt(daum_politics.substring(0, daum_politics.indexOf(" ")));
 			
 			return value + " " +naver_politics + " " + daum_politics;
-		} else if(category.equalsIgnoreCase("economic")) {
+		} else if(category.equalsIgnoreCase("economy")) {
 			String naver_economic = selectGet("http://news.naver.com/main/main.nhn?mode=LSD&mid=shm&sid1=101", ".section_headline", "#articleBody", "sectionList.nhn");
 			String daum_economic = selectGet("http://media.daum.net/economic", ".wrap_newsitem", "div#contentsWrapper");
 			
