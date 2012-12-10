@@ -207,7 +207,7 @@ public class MainFrame extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			for ( URLPanel panel : MainFrame.this.urlpanels ) {
-				System.out.println(crawler.getHtml(panel.GetURL()));
+//				System.out.println(crawler.getHtml(panel.GetURL()));
 
 				ArticleFilter filter = new ArticleFilter(panel.GetCategory(), crawler.getHtml(panel.GetURL()));
 

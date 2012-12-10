@@ -18,6 +18,7 @@ public class WordDatabase {
 	
 	public WordDatabase() {
 		categoryList = new LinkedList<String>();
+		/*
 		categoryList.add("정치");
 		categoryList.add("경제");
 		categoryList.add("사회");
@@ -26,6 +27,8 @@ public class WordDatabase {
 		categoryList.add("한글이다");
 		categoryList.add("english");
 		categoryList.add("포탈");
+		*/
+		List<String> categoryCount = this.getCategories();
 		
 		Collections.sort(categoryList, new Comparator<String>() {
 			@Override
@@ -35,38 +38,72 @@ public class WordDatabase {
 		});
 	}
 	
-	public static void main(String[] args) {
-		WordDatabase learn = new WordDatabase();
-		//List<LinkedList<String>> word = new ArrayList<LinkedList<String>>();
-		String[] test = new String[3];
+	private List<String> getCategories() {
+		List<String> category = new LinkedList<String>();
+		Connection conn;
+		Statement stmt;
+		ResultSet rs;
 
-		test[0] = "han";
-		test[1] = "hyun";
-		test[2] = "abcd";
-		
-		ArticleFilter insertWord = new ArticleFilter("english", "��ǻ�Ͱ� ����Ʈ���� ���ȴ�");
-		learn.learningInsert(insertWord);
-		//learn.learningInsert(test, "�ѱ��̴�");
-		
-		List<String> catCount = learn.categoryCount();
-		
-//		for(int i = 0; i<catCount.size(); i++){
-//			System.out.println(catCount.get(i));
-//		}	
-		
-		/*List<String> wordSet = new LinkedList<String>();
-		wordSet.add("han");
-		wordSet.add("hyun");
-		wordSet.add("noex");
-		word = learn.wordStatistic(wordSet);
+		try{
+			Class.forName("com.mysql.jdbc.Driver");
+		}catch(ClassNotFoundException e){
+			System.err.print("ClassNOtFoundException: ");
+		}
 
-		for(int i = 0; i<word.size(); i++){
-			for(int j = 0; j<word.get(i).size(); j++){
-				System.out.print(word.get(i).get(j)+" ");
-			}
-			System.out.println();
-		}*/
+		try{
+			String jdbcUrl = "jdbc:mysql://intra.zeropage.org:3306/OOPProj";
+			String userid = "root";
+			String userPass = "";
+			conn = DriverManager.getConnection(jdbcUrl,userid,userPass);
+			stmt = conn.createStatement();
+			
+			String sql = "SELECT * FROM catCount ORDER BY cat ASC";
+			rs = stmt.executeQuery(sql);
+			rs.next();
+			
+			while(!rs.isAfterLast()){
+				category.add(rs.getString(1));
+				rs.next();
+			}			
+		}catch(SQLException e){
+			System.out.println("fail... "+e.getMessage());
+		}
+		
+		return category;
 	}
+//
+//	public static void main(String[] args) {
+//		WordDatabase learn = new WordDatabase();
+//		//List<LinkedList<String>> word = new ArrayList<LinkedList<String>>();
+//		String[] test = new String[3];
+//
+//		test[0] = "han";
+//		test[1] = "hyun";
+//		test[2] = "abcd";
+//		
+//		ArticleFilter insertWord = new ArticleFilter("english", "��ǻ�Ͱ� ����Ʈ���� ���ȴ�");
+//		learn.learningInsert(insertWord);
+//		//learn.learningInsert(test, "�ѱ��̴�");
+//		
+//		List<String> catCount = learn.categoryCount();
+//		
+////		for(int i = 0; i<catCount.size(); i++){
+////			System.out.println(catCount.get(i));
+////		}	
+//		
+//		/*List<String> wordSet = new LinkedList<String>();
+//		wordSet.add("han");
+//		wordSet.add("hyun");
+//		wordSet.add("noex");
+//		word = learn.wordStatistic(wordSet);
+//
+//		for(int i = 0; i<word.size(); i++){
+//			for(int j = 0; j<word.get(i).size(); j++){
+//				System.out.print(word.get(i).get(j)+" ");
+//			}
+//			System.out.println();
+//		}*/
+//	}
 
 	//Change parameter later List<String>, String cat -> List<Data>      Data is UDT made by gea chul
 	public void learningInsert(ArticleFilter word){
