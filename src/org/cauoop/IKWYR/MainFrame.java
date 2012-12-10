@@ -132,7 +132,7 @@ public class MainFrame extends JFrame {
 		analysisButton.addActionListener(new AnalysisListener());
 		
 		categoryComboBox = new JComboBox<String>();
-		categoryComboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"None", "\uC815\uCE58", "\uACBD\uC81C", "IT", "\uC0AC\uD68C", "\uBB38\uD654", "\uD3EC\uD0C8", "\uD55C\uAE00\uC774\uB2E4", "english"}));
+		categoryComboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"None", "politics", "economy", "society", "world", "entertain", "tech"}));
 		categoryComboBox.addActionListener(new ActionListener() {			
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -149,7 +149,10 @@ public class MainFrame extends JFrame {
 		portalCrawling.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				database.learningInsert(crawler.autoGet((String) categoryComboBox.getSelectedItem()).split(" "), (String) categoryComboBox.getSelectedItem());
+				String words = crawler.autoGet((String) categoryComboBox.getSelectedItem());
+				if ( words != null ) {
+					database.learningInsert(words.split(" "), (String) categoryComboBox.getSelectedItem());
+				}
 			}
 		});
 		
@@ -208,10 +211,11 @@ public class MainFrame extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			for ( URLPanel panel : MainFrame.this.urlpanels ) {
 //				System.out.println(crawler.getHtml(panel.GetURL()));
+				if ( !panel.GetCategory().equals("") ) {
+					ArticleFilter filter = new ArticleFilter(panel.GetCategory(), crawler.getHtml(panel.GetURL()));
 
-				ArticleFilter filter = new ArticleFilter(panel.GetCategory(), crawler.getHtml(panel.GetURL()));
-
-				database.learningInsert(filter.getSplit(), panel.GetCategory());
+					database.learningInsert(filter.getSplit(), panel.GetCategory());
+				}
 			}			
 		}		
 	}
@@ -234,8 +238,8 @@ public class MainFrame extends JFrame {
 				Collections.sort(results, new Comparator<String>() {
 					@Override
 					public int compare(String category1, String category2) {
-						String percent1 = category1.substring(category1.indexOf(":") + 2, category1.indexOf("%")-1);
-						String percent2 = category2.substring(category2.indexOf(":") + 2, category2.indexOf("%")-1);
+						String percent1 = category1.substring(category1.indexOf(":") + 2, category1.indexOf(":")+5);
+						String percent2 = category2.substring(category2.indexOf(":") + 2, category2.indexOf(":")+5);
 						return (int) (Double.parseDouble(percent2) * NUMBER_FOR_DECIMAL_CALCULATION - Double.parseDouble(percent1) * NUMBER_FOR_DECIMAL_CALCULATION);
 					}
 				});

@@ -28,7 +28,7 @@ public class WordDatabase {
 		categoryList.add("english");
 		categoryList.add("포탈");
 		*/
-		List<String> categoryCount = this.getCategories();
+		categoryList = this.getCategories();
 		
 		Collections.sort(categoryList, new Comparator<String>() {
 			@Override
@@ -39,8 +39,41 @@ public class WordDatabase {
 	}
 	
 	private List<String> getCategories() {
-		// TODO Auto-generated method stub
-		return null;
+		List<String> category = new LinkedList<String>();
+		Connection conn;
+		Statement stmt;
+		ResultSet rs;
+
+		try{
+			Class.forName("com.mysql.jdbc.Driver");
+		}catch(ClassNotFoundException e){
+			System.err.print("ClassNOtFoundException: ");
+		}
+
+		try{
+			String jdbcUrl = "jdbc:mysql://intra.zeropage.org:3306/OOPProj";
+			String userid = "root";
+			String userPass = "";
+			conn = DriverManager.getConnection(jdbcUrl,userid,userPass);
+			stmt = conn.createStatement();
+			
+			String sql = "SELECT * FROM catCount ORDER BY cat ASC";
+			try{
+				rs = stmt.executeQuery(sql);
+				rs.next();
+				
+				while(!rs.isAfterLast()){
+					category.add(rs.getString(1));
+					rs.next();
+				}	
+			}catch(SQLException e){
+				
+			}				
+		}catch(SQLException e){
+			System.out.println("fail... "+e.getMessage());
+		}
+		
+		return category;
 	}
 //
 //	public static void main(String[] args) {
