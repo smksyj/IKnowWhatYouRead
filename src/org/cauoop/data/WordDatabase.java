@@ -170,7 +170,7 @@ public class WordDatabase {
 						insertStmt.executeUpdate();*/
 					}
 				}catch(SQLException e){	//If word table wasn't exist. Create table and insert values
-					sql = "CREATE TABLE IF NOT EXISTS " + words[i] + " (category CHAR(10) NOT NULL, num INT, PRIMARY KEY(category))";
+					sql = "CREATE TABLE IF NOT EXISTS " + words[i] + " (category CHAR(10) NOT NULL, num INT, PRIMARY KEY(category), FOREIGN KEY(category) REFERENCES catCount(cat) ON DELETE CASCASE ON UPDATE CASCADE)";
 					stmt.executeUpdate(sql);
 					sql = "INSERT INTO " + words[i] + " VALUES('"+cat+"', 1)";
 					stmt.executeUpdate(sql);
@@ -234,7 +234,7 @@ public class WordDatabase {
 						stmt.executeUpdate(sql);
 					}
 				}catch(SQLException e){	//If word table wasn't exist. Create table and insert values
-					sql = "CREATE TABLE IF NOT EXISTS " + words[i] + " (category CHAR(10) NOT NULL, num INT, PRIMARY KEY(category))";
+					sql = "CREATE TABLE IF NOT EXISTS " + words[i] + " (category CHAR(10) NOT NULL, num INT, PRIMARY KEY(category), FOREIGN KEY(category) REFERENCES catCount(cat) ON DELETE CASCADE ON UPDATE CASCADE)";
 					stmt.executeUpdate(sql);
 					sql = "INSERT INTO " + words[i] + " VALUES('"+cat+"', 1)";
 					stmt.executeUpdate(sql);
@@ -385,7 +385,7 @@ public class WordDatabase {
 						stmt.executeUpdate(sql);
 					}
 				}catch(SQLException e){	//If word table wasn't exist. Create table and insert values
-					sql = "CREATE TABLE IF NOT EXISTS " + words[i] + " (category CHAR(10) NOT NULL, num INT, PRIMARY KEY(category))";
+					sql = "CREATE TABLE IF NOT EXISTS " + words[i] + " (category CHAR(10) NOT NULL, num INT, PRIMARY KEY(category), FOREIGN KEY(category) REFERENCES catCount(cat) ON DELETE CASCADE ON UPDATE CASCADE)";
 					stmt.executeUpdate(sql);
 					sql = "INSERT INTO " + words[i] + " VALUES('"+cat+"', 1)";
 					stmt.executeUpdate(sql);
