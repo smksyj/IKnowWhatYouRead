@@ -150,8 +150,23 @@ public class MainFrame extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				String words = crawler.autoGet((String) categoryComboBox.getSelectedItem());
+				String[] splitted = words.split(" ");
+				String[] newWords = new String[splitted.length-2];
+				int count = 0;
+				
+				for (int i = 0; i < splitted.length; i++) {
+					try {
+						count += Integer.parseInt(splitted[i]);
+					} catch ( NumberFormatException e ) {
+						for ( int j = 0; j < newWords.length; j++ ) {
+							newWords[j] = splitted[i+j];
+						}
+						break;
+					}
+				}
+				
 				if ( words != null ) {
-					database.learningInsert(words.split(" "), (String) categoryComboBox.getSelectedItem());
+					database.learningInsert(count, newWords, (String) categoryComboBox.getSelectedItem());
 				}
 			}
 		});

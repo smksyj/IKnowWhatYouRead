@@ -339,6 +339,65 @@ public class WordDatabase {
 		return category;
 	}
 	
+	public void learningInsert(int num, String[] words, String cat){
+		Connection conn;
+		Statement stmt, catCount;
+
+		try{
+			Class.forName("com.mysql.jdbc.Driver");
+		}catch(ClassNotFoundException e){
+			System.err.print("ClassNOtFoundException: ");
+		}
+
+		try{
+			String jdbcUrl = "jdbc:mysql://intra.zeropage.org:3306/OOPProj";
+			String userid = "root";
+			String userPass = "";
+			conn = DriverManager.getConnection(jdbcUrl,userid,userPass);
+			stmt = conn.createStatement();
+			
+			catCount = conn.createStatement();
+
+			String catInsert = "CREATE TABLE IF NOT EXISTS catCount(cat CHAR(10) NOT NULL, num INT, PRIMARY KEY(cat))";
+			catCount.executeUpdate(catInsert);
+
+			String catUpdate = "UPDATE catCount SET num=num+"+num+" WHERE cat='" + cat + "'";
+			if(catCount.executeUpdate(catUpdate)==0){	//Table is exist but have no row category=word.get(0)
+				catUpdate = "INSERT INTO catCount VALUES('"+cat+"', "+num+")";
+				stmt.executeUpdate(catUpdate);
+			}
+			catCount.close();
+			
+			//word table
+			//+------------+
+			//|category|num|
+			//|------------|
+			int j = words.length;		
+			for(int i = 0; i<j; i++){
+				if ( words[i].equals("") || words[i].length() > 30 || words[i].matches("[0-9]*") ) {
+					continue;
+				}
+				String sql = "UPDATE " + words[i] + " SET num=num+1 WHERE category='" + cat + "'";
+//				System.out.println(words[i]);
+				try{
+					if(stmt.executeUpdate(sql)==0){	//Table is exist but have no row category=word.get(0)
+						sql = "INSERT INTO " + words[i] + " VALUES('"+cat+"', 1)";
+						stmt.executeUpdate(sql);
+					}
+				}catch(SQLException e){	//If word table wasn't exist. Create table and insert values
+					sql = "CREATE TABLE IF NOT EXISTS " + words[i] + " (category CHAR(10) NOT NULL, num INT, PRIMARY KEY(category))";
+					stmt.executeUpdate(sql);
+					sql = "INSERT INTO " + words[i] + " VALUES('"+cat+"', 1)";
+					stmt.executeUpdate(sql);
+				}
+			}
+			conn.close();
+			stmt.close();
+		}catch(SQLException e){
+			System.out.println("fail... "+e.getMessage());			
+		}
+	}
+	
 	public void addCategory(String cat){
 		categoryList.add(cat);
 		Collections.sort(categoryList, new Comparator<String>() {
