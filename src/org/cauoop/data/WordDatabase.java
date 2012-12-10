@@ -28,7 +28,7 @@ public class WordDatabase {
 		categoryList.add("english");
 		categoryList.add("포탈");
 		*/
-		List<String> categoryCount = this.getCategories();
+		categoryList = this.getCategories();
 		
 		Collections.sort(categoryList, new Comparator<String>() {
 			@Override
