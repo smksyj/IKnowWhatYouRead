@@ -43,7 +43,5 @@ public class Classifier {
 		}		
 
 		return result;
-	}
-	
-	
+	}	
 }

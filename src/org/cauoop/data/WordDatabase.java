@@ -18,6 +18,7 @@ public class WordDatabase {
 	
 	public WordDatabase() {
 		categoryList = new LinkedList<String>();
+		/*
 		categoryList.add("정치");
 		categoryList.add("경제");
 		categoryList.add("사회");
@@ -26,6 +27,8 @@ public class WordDatabase {
 		categoryList.add("한글이다");
 		categoryList.add("english");
 		categoryList.add("포탈");
+		*/
+		List<String> categoryCount = this.getCategories();
 		
 		Collections.sort(categoryList, new Comparator<String>() {
 			@Override
@@ -35,38 +38,43 @@ public class WordDatabase {
 		});
 	}
 	
-	public static void main(String[] args) {
-		WordDatabase learn = new WordDatabase();
-		//List<LinkedList<String>> word = new ArrayList<LinkedList<String>>();
-		String[] test = new String[3];
-
-		test[0] = "han";
-		test[1] = "hyun";
-		test[2] = "abcd";
-		
-		ArticleFilter insertWord = new ArticleFilter("english", "��ǻ�Ͱ� ����Ʈ���� ���ȴ�");
-		learn.learningInsert(insertWord);
-		//learn.learningInsert(test, "�ѱ��̴�");
-		
-		List<String> catCount = learn.categoryCount();
-		
-//		for(int i = 0; i<catCount.size(); i++){
-//			System.out.println(catCount.get(i));
-//		}	
-		
-		/*List<String> wordSet = new LinkedList<String>();
-		wordSet.add("han");
-		wordSet.add("hyun");
-		wordSet.add("noex");
-		word = learn.wordStatistic(wordSet);
-
-		for(int i = 0; i<word.size(); i++){
-			for(int j = 0; j<word.get(i).size(); j++){
-				System.out.print(word.get(i).get(j)+" ");
-			}
-			System.out.println();
-		}*/
+	private List<String> getCategories() {
+		// TODO Auto-generated method stub
+		return null;
 	}
+//
+//	public static void main(String[] args) {
+//		WordDatabase learn = new WordDatabase();
+//		//List<LinkedList<String>> word = new ArrayList<LinkedList<String>>();
+//		String[] test = new String[3];
+//
+//		test[0] = "han";
+//		test[1] = "hyun";
+//		test[2] = "abcd";
+//		
+//		ArticleFilter insertWord = new ArticleFilter("english", "��ǻ�Ͱ� ����Ʈ���� ���ȴ�");
+//		learn.learningInsert(insertWord);
+//		//learn.learningInsert(test, "�ѱ��̴�");
+//		
+//		List<String> catCount = learn.categoryCount();
+//		
+////		for(int i = 0; i<catCount.size(); i++){
+////			System.out.println(catCount.get(i));
+////		}	
+//		
+//		/*List<String> wordSet = new LinkedList<String>();
+//		wordSet.add("han");
+//		wordSet.add("hyun");
+//		wordSet.add("noex");
+//		word = learn.wordStatistic(wordSet);
+//
+//		for(int i = 0; i<word.size(); i++){
+//			for(int j = 0; j<word.get(i).size(); j++){
+//				System.out.print(word.get(i).get(j)+" ");
+//			}
+//			System.out.println();
+//		}*/
+//	}
 
 	//Change parameter later List<String>, String cat -> List<Data>      Data is UDT made by gea chul
 	public void learningInsert(ArticleFilter word){

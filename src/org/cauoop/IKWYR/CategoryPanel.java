@@ -8,7 +8,7 @@ import javax.swing.BoxLayout;
 
 public class CategoryPanel extends JPanel {
 
-	public JTextArea textArea;
+	JTextArea textArea;
 	/**
 	 * Create the panel.
 	 */
