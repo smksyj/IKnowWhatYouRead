@@ -9,7 +9,7 @@ import org.jsoup.select.Elements;
 
 public class ArticleCrawler {
 	public String getHtml(String str, String hereText) {
-		if ( str == null ) {
+		if ( str == null || str.equals("") ) {
 			return null;
 		}
 
@@ -64,15 +64,15 @@ public class ArticleCrawler {
 	}
 
 	public String autoGet(String category) {
-		if(category.equalsIgnoreCase("Á¤Ä¡")) {
+		if(category.equalsIgnoreCase("ï¿½ï¿½Ä¡")) {
 			String naver_politics = selectGet("http://news.naver.com/main/main.nhn?mode=LSD&mid=shm&sid1=100", ".section_headline", "sectionList.nhn");
 			String daum_politics = selectGet("http://media.daum.net/politics", ".wrap_newsitem", "");
 			return naver_politics + " " + daum_politics;
-		} else if(category.equalsIgnoreCase("°æÁ¦")) {
+		} else if(category.equalsIgnoreCase("ï¿½ï¿½ï¿½ï¿½")) {
 			String naver_economic = selectGet("http://news.naver.com/main/main.nhn?mode=LSD&mid=shm&sid1=101", ".section_headline", "sectionList.nhn");
 			String daum_economic = selectGet("http://media.daum.net/economic", ".wrap_newsitem", "");
 			return naver_economic + daum_economic;
-		} else if(category.equalsIgnoreCase("»çÈ¸")) {
+		} else if(category.equalsIgnoreCase("ï¿½ï¿½È¸")) {
 			String naver_society = selectGet("http://news.naver.com/main/main.nhn?mode=LSD&mid=shm&sid1=102", ".section_headline", "sectionList.nhn");
 			String daum_society = selectGet("http://media.daum.net/society", ".wrap_newsitem", "");
 			return naver_society + " " + daum_society;
@@ -80,7 +80,7 @@ public class ArticleCrawler {
 			String naver_world = selectGet("http://news.naver.com/main/main.nhn?mode=LSD&mid=shm&sid1=104", ".section_headline", "sectionList.nhn");
 			String daum_world = selectGet("http://media.daum.net/foreign", ".wrap_newsitem", "");
 			return naver_world + " " + daum_world;
-		} else if(category.equalsIgnoreCase("¹®È­")) {
+		} else if(category.equalsIgnoreCase("ï¿½ï¿½È­")) {
 			String naver_entertain = selectGet("http://news.naver.com/main/main.nhn?mode=LSD&mid=shm&sid1=106", ".section_headline","sectionList.nhn");
 			return naver_entertain;
 		}
